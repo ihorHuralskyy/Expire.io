@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using UniversityProj.Helpers.Attributes;
+using Expire.io.Helpers.Attributes;
 
-namespace UniversityProj.ViewModels
+namespace Expire.io.ViewModels
 {
     public class RegisterViewModel
     {

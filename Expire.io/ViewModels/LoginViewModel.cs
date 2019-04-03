@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UniversityProj.ViewModels
+namespace Expire.io.ViewModels
 {
     public class LoginViewModel
     {

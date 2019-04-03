@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace UniversityProj.Models.Entities
+namespace Expire.io.Models.Entities
 {
     public class UserRole: IdentityUserRole<int>
     {

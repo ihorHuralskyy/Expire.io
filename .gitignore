@@ -647,4 +647,7 @@ $RECYCLE.BIN/
 
 # BeatPulse healthcheck temp database
 
+# For Mac OS
+.DS_Store
+
 # End of https://www.gitignore.io/api/csharp,windows,aspnetcore,visualstudio

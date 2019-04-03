@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace UniversityProj.Models.Entities
+namespace Expire.io.Models.Entities
 {
     public class TypeOfDoc
     {

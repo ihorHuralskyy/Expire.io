@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Expire.io.Models.Entities
+namespace Expire.io.DTOs
 {
-    public class UserImage
+    public class UserImageDTO
     {
         public int Id { get; set; }
         public byte[] Image { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
     }
 }

@@ -1,43 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Expire.io.Models;
+using Microsoft.EntityFrameworkCore;
+using Expire.io.DTOs;
+using Expire.io.Models.Data;
+using Expire.io.Models.Entities;
+
 
 namespace Expire.io.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly UserManager<User> _userManager;
+        private readonly ExpireContext _context;
+        public HomeController(UserManager<User> userManager, ExpireContext context)
         {
-            return View();
+            _userManager = userManager;
+            _context = context;
         }
-
-        public IActionResult About()
+        public async Task<IActionResult> Index()
         {
-            ViewData["Message"] = "Your application description page.";
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            return View();
-        }
+            var roles = await _userManager.GetRolesAsync(user);
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+            var img = await _context.UserImages.FirstAsync(i => i.UserId == user.Id);
 
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var userDTO = new UserDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Id = user.Id,
+                Phone = user.PhoneNumber,
+                ManagerId = user.ManagerId,
+                UserName = user.UserName,
+                Roles = roles.Select(r => new RoleDTO() { Name = r }).ToList()
+            };
+            if (img != null)
+                userDTO.Image = new UserImageDTO { Id = img.Id, Image = img.Image, UserId = userDTO.Id };
+            return View(userDTO);
         }
     }
 }

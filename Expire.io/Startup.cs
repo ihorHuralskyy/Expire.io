@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Expire.io.Helpers;
+using Expire.io.Models.Data;
+using Expire.io.Models.Entities;
+
 
 namespace Expire.io
 {
@@ -24,14 +29,23 @@ namespace Expire.io
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddDbContext<ExpireContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<User, Role>((opts) => {
+                opts.Password.RequireDigit = false;
+                opts.Password.RequiredLength = 8;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+            })
+                 .AddEntityFrameworkStores<ExpireContext>();
+            services.AddTransient<Seed>();
+
+            services.AddAuthorization(opts =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                opts.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
             });
-
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

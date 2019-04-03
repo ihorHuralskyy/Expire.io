@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UniversityProj.Models.Entities;
+using Expire.io.Models.Entities;
 
-namespace UniversityProj.Models.Configurations
+namespace Expire.io.Models.Configurations
 {
     public class UserImageConfiguration : IEntityTypeConfiguration<UserImage>
     {

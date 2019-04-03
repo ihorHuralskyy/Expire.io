@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniversityProj.Models.Entities;
+using Expire.io.Models.Entities;
 
-namespace UniversityProj.Models.Configurations
+namespace Expire.io.Models.Configurations
 {
     public class DocumentImageConfiguration : IEntityTypeConfiguration<DocumentImage>
     {

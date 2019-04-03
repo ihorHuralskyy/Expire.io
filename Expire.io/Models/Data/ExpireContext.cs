@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UniversityProj.Models.Configurations;
-using UniversityProj.Models.Entities;
+using Expire.io.Models.Configurations;
+using Expire.io.Models.Entities;
 
-namespace UniversityProj.Models.Data
+namespace Expire.io.Models.Data
 {
     public class ExpireContext: IdentityDbContext<User,Role,int>
     {

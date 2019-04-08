@@ -29,11 +29,7 @@
                 <a asp-area="" asp-controller="Document" asp-action="Index" class="navbar-brand">UniversityProj</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Document" asp-action="Index">Documents</a></li>
-
-                </ul>
+                <ul class="nav navbar-nav"></ul>
                 @{
                     if (!User.Identity.IsAuthenticated)
                     {
@@ -42,13 +38,16 @@
                             <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
                         </ul>
                     }
-                }
-                @{
-                    if (User.Identity.IsAuthenticated)
+                    else
                     {
                         <ul class="nav navbar-nav">
-                            <li><a asp-area="" asp-controller="Account" asp-action="Logout">Register</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-area="" asp-controller="Document" asp-action="Index">Documents</a></li>
                         </ul>
+                        <form asp-controller="Account" asp-action="LogOff">
+                            <p>@User.Identity.Name</p>
+                            <input type="submit" value="Log out" />
+                        </form>
                     }
                 }
             </div>

@@ -27,11 +27,16 @@ namespace Expire.io.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 try
@@ -84,7 +89,42 @@ namespace Expire.io.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                if (res.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction(controllerName: "Home", actionName: "Index");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Password is not valid");
+                }
+            }
+            return View(model);
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login");
         }
     }
 }

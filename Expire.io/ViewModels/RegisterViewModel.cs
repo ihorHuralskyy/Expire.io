@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Expire.io.Helpers.Attributes;
 
 namespace Expire.io.ViewModels
@@ -30,7 +26,8 @@ namespace Expire.io.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password",ErrorMessage ="Wrong password")]
         public string ConfirmPassword { get; set; }
-        [FileExtensionsCustom("jpg,png,jpeg,gif",ErrorMessage ="Not proper format")]
+        [ImageValidation]
+        [FileValidationCustom("Invalid extension","Invalid type","jpeg,jpg,png")]
         [Display(Name ="User Avatar")]
         public IFormFile Photo { get; set; }
     }

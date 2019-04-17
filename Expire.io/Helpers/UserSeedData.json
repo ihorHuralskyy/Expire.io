@@ -1,3 +1,10 @@
-﻿{
-
-}
+﻿[
+  {
+    "FName": "Eduard",
+    "LName": "Zakharin",
+    "Email": "edzakharin@gmail.com",
+    "Phone": "+380501488567",
+    "Password": "qwerty1234",
+    "ConfirmPassword": "qwerty1234"
+  }
+]

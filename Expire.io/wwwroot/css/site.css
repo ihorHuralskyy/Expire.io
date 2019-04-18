@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 body {
+    background-image: linear-gradient(to left,#355C7D,#6C5B7B,#C06C84);
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -34,4 +35,32 @@ body {
     .carousel-caption {
         display: none;
     }
+}
+
+#rightInf{
+    float: right;
+}
+#avatarImage{
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+#fullName{
+    color: #111;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 100px; 
+    font-weight: bold; 
+    letter-spacing: -1px; 
+    line-height: 1; 
+    text-align: center; 
+}
+.profilePageInf {
+    color: #111;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 25px;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+.profilePageInf li{
+    margin-top: 5px;
 }

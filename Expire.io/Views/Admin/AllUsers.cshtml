@@ -2,6 +2,21 @@
 @{
     ViewData["Title"] = "AllUsers";
 }
+@model System.Collections.Generic.IEnumerable<Expire.io.DTOs.UserDTO>
 
-<h2>AllUsers</h2>
+<div class="container" style="margin-top: 20px">
+    <div class="row" style="margin: 20px">
+       <button onclick="location.href = '@Url.Action("CreateUser", "Admin")'">Create User</button>
+    </div>
+    <ul>
+        @{
+            foreach (Expire.io.DTOs.UserDTO item in @Model)
+            {
+                <li>
+                    <p>@item.FirstName - @item.LastName</p>
+                </li>
+            }
+        }
+    </ul>
+</div>
 

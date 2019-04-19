@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace Expire.io.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     public class AdminController : Controller
     {
 
@@ -87,7 +87,7 @@ namespace Expire.io.Controllers
                         }
                         await _userManager.AddToRoleAsync(user, "User");
                         await _signInManager.SignInAsync(user, isPersistent: true);
-                        return RedirectToAction("Index", controllerName: "Home");
+                        return Ok();
                     }
                     else
                     {
@@ -103,7 +103,7 @@ namespace Expire.io.Controllers
                 }
             }
 
-            return Ok();
+            return BadRequest("Your data is not valid");
         }
     }
 }

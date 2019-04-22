@@ -7,18 +7,30 @@ $(document).ready(function() {
     $('#ff').submit('click',
         function(e) {
 
-            let from = $(this);
+            let form = $(this);
+            let data = form.serialize();
+            var token = $("input[name^=__RequestVerificationToken]").val();
+            data += '&__RequestVerificationToken=' + token;
 
             $.ajax({
                 type: "post",
                 url: "/Admin/CreateUser",
-                data: from.serialize(),
-                success: function() {
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(resp) {
                     window.alert("User was successfull added");
+                    location.reload();
                 },
                 fail: function(err) {
                     alert(err);
+                },
+                error: function(jqXHR, exception) {
+                    console.log(jqXHR.status + ' ' + exception);
                 }
             })
+
+            return false;
         });
 })

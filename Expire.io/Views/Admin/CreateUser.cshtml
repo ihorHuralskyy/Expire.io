@@ -2,9 +2,9 @@
 @{
     ViewData["Title"] = "CreateUser";
 }
-@model Expire.io.ViewModels.RegisterViewModel;
+@model Expire.io.ViewModels.AdminAddUserViewModel;
 
-<form id="ff" enctype="multipart/form-data">
+<form id="ff"  >
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="FName"></label><br />
@@ -35,9 +35,6 @@
         <label asp-for="ConfirmPassword"></label><br />
         <input asp-for="ConfirmPassword" class="form-control" />
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="file" asp-for="Photo" /><br>
     </div>
 
     <div class="form-group">

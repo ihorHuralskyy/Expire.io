@@ -21,10 +21,11 @@ namespace Expire.io.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ExpireContext _context;
         private readonly SignInManager<User> _signInManager;
-        public AdminController(UserManager<User> userManager, ExpireContext context)
+        public AdminController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sg)
         {
             _userManager = userManager;
             _context = context;
+            _signInManager = sg;
         }
         public async Task<IActionResult> AllUsers()
         {
@@ -53,7 +54,7 @@ namespace Expire.io.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateUser(RegisterViewModel model)
+        public async Task<IActionResult> CreateUser(AdminAddUserViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -66,28 +67,13 @@ namespace Expire.io.Controllers
                         Email = model.Email,
                         UserName = model.Email
                     };
-                    UserImage image = null;
-                    if (model.Photo != null)
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            model.Photo.CopyTo(ms);
-                            byte[] img = ms.ToArray();
-                            image = new UserImage { Image = img };
-                        }
-                    }
                     var result = await _userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
-                        if (image != null)
-                        {
-                            image.User = user;
-                            _context.UserImages.AddAsync(image).Wait();
-                            await _context.SaveChangesAsync();
-                        }
                         await _userManager.AddToRoleAsync(user, "User");
                         await _signInManager.SignInAsync(user, isPersistent: true);
-                        return Ok();
+                        Response.StatusCode = 200;
+                        return Json(new { Success = true });
                     }
                     else
                     {
@@ -95,6 +81,7 @@ namespace Expire.io.Controllers
                         {
                             ModelState.AddModelError(string.Empty, item.Description);
                         }
+
                     }
                 }
                 catch (Exception ex)

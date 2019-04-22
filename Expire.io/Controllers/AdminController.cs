@@ -71,7 +71,6 @@ namespace Expire.io.Controllers
                     if (result.Succeeded)
                     {
                         await _userManager.AddToRoleAsync(user, "User");
-                        await _signInManager.SignInAsync(user, isPersistent: true);
                         Response.StatusCode = 200;
                         return Json(new { Success = true });
                     }
@@ -91,6 +90,23 @@ namespace Expire.io.Controllers
             }
 
             return BadRequest("Your data is not valid");
+        }
+
+ 
+        public async Task<IActionResult> DeleteUser(string username)
+        {
+
+            var user = _userManager.Users.Where(u => u.UserName == username).First();
+            int Id = user.Id;
+            var result = _userManager.DeleteAsync(user).Result;
+            if (result.Succeeded == true)
+            {
+                return Ok(Json(new {resp = "User was deleted", id = Id}));
+            }
+            else
+            {
+                return BadRequest(Json(new {resp = "Unexpected server error"}));
+            }
         }
     }
 }

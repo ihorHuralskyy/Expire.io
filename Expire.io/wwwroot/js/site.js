@@ -34,3 +34,24 @@ $(document).ready(function() {
             return false;
         });
 })
+
+function deleteUser(user)
+{
+    $.ajax({
+        url: "/Admin/DeleteUser",
+        data: {username : user.toString()},
+        success: function (resp) {
+            console.log(resp.value.resp);
+            window.alert(resp.value.resp);
+            selector = '#' + resp.value.id;
+            var toDelete = $(selector.toString());
+            toDelete.remove();
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
+}

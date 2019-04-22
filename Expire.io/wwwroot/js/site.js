@@ -55,3 +55,7 @@ function deleteUser(user)
         }
     })
 }
+
+function makeAnAdmin(user) {
+    
+}

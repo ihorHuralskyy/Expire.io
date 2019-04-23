@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Diagnostics;
+using Expire.io.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Expire.io.Controllers
 {
@@ -21,30 +23,32 @@ namespace Expire.io.Controllers
         private readonly UserManager<User> _userManager;
         private readonly ExpireContext _context;
         private readonly SignInManager<User> _signInManager;
-        public AdminController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sg)
+        private readonly RoleManager<Role> _roleManager;
+        public AdminController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sg, RoleManager<Role>  rm)
         {
             _userManager = userManager;
             _context = context;
             _signInManager = sg;
+            _roleManager = rm;
         }
         public async Task<IActionResult> AllUsers()
         {
             var allUsers = _userManager.Users.Select(user =>
-           new UserDTO{
-               Id = user.Id,
-               FirstName = user.FirstName,
-               LastName = user.LastName,
-               Email = user.Email,
-               Phone = user.PhoneNumber,
-               UserName = user.UserName,
-               Roles = user.UserRoles.Select(role=>new RoleDTO
-               {
-                   Id = role.RoleId,
-                   Name = _userManager.GetRolesAsync(user).Result.FirstOrDefault()
-               }).ToList()
-            });
+                new UserDTORolesList
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber,
+                    UserName = user.UserName
+                }).ToList();
 
-            return View(allUsers);
+            foreach (var item in allUsers)
+            {
+                item.Roles = await _userManager.GetRolesAsync(_userManager.Users.Where(u=>u.UserName ==item.UserName).First());
+            }
+            return View(allUsers.ToList());
         }
 
         [HttpGet]
@@ -106,6 +110,21 @@ namespace Expire.io.Controllers
             else
             {
                 return BadRequest(Json(new {resp = "Unexpected server error"}));
+            }
+        }
+
+        public IActionResult MakeUserAnAdmin(string username)
+        {
+            var user = _userManager.Users.Where(u => u.UserName == username).First();
+            int Id = user.Id;
+            var result = _userManager.AddToRoleAsync(user, "Admin").Result;
+            if (result.Succeeded == true)
+            {
+                return Ok(Json(new { resp = user.UserName.ToString() + "was added to role Admin ", id = Id }));
+            }
+            else
+            {
+                return BadRequest(Json(new { resp = "Unexpected server error" }));
             }
         }
     }

@@ -41,7 +41,7 @@ function deleteUser(user)
         url: "/Admin/DeleteUser",
         data: {username : user.toString()},
         success: function (resp) {
-            console.log(resp.value.resp);
+            
             window.alert(resp.value.resp);
             selector = '#' + resp.value.id;
             var toDelete = $(selector.toString());
@@ -55,7 +55,29 @@ function deleteUser(user)
         }
     })
 }
-
+function aaa() {
+    var a = $("#13006").find(".adminButton");
+    a[0].style.display = "none";
+    console.log(a);
+}
 function makeAnAdmin(user) {
-    
+    $.ajax({
+        url: "/Admin/MakeUserAnAdmin",
+        data: { username: user.toString() },
+        success: function (resp) {
+          
+            window.alert(resp.value.resp);
+            selector = '#' + resp.value.id;
+            var a = $(selector.toString()).find("p");
+            a[1].textContent = "Admin";
+            var b = $(selector.toString()).find(".adminButton");
+            b[0].style.display = "none";
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
 }

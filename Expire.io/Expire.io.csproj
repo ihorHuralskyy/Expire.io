@@ -5,18 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bower" Version="1.3.11" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-dev002497" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
 
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO%27s\" />
     <Folder Include="Mappers\" />
   </ItemGroup>
 </Project>

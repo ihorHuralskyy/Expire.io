@@ -29,7 +29,14 @@ namespace Expire.io.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var img = await _context.UserImages.FirstAsync(i => i.UserId == user.Id);
+            UserImage img = null;
+            try
+            {
+               img = await _context.UserImages.FirstAsync(i => i.UserId == user.Id);
+            }
+            catch (Exception e)
+            {
+            }
 
             var userDTO = new UserDTO
             {
@@ -46,5 +53,6 @@ namespace Expire.io.Controllers
                 userDTO.Image = new UserImageDTO { Id = img.Id, Image = img.Image, UserId = userDTO.Id };
             return View(userDTO);
         }
+
     }
 }

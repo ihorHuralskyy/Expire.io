@@ -5,18 +5,23 @@
 @model Expire.io.DTOs.UserDTO;
 
 
-<div class="card" style="width: 18rem;">
-    @{ if (Model.Image != null)
-        {
-            @:<img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Image.Image))" class="card-img-top" alt="...">
-        }
-    }
-    <div class="card-body">
-        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+<div class="container">
+    <div class="row" style="margin-top:20px; ">
+        <div class="col-sm-4">
+            @{
+                if (Model.Image != null)
+                {
+                    @:<img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Image.Image))" alt="..." id="avatarImage">
+                }
+            }
+        </div>
+        <div class="col-sm-8">
+            <h5 id="fullName">@Model.FirstName @Model.LastName</h5>
+            <ul style="list-style-type: none" class="profilePageInf">
+                <li >Email: @Model.Email</li>
+                <li>Phone: @Model?.Phone</li>
+                <li>UserName: @Model.</li>
+            </ul>
+        </div>
     </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Email: @Model.Email</li>
-        <li class="list-group-item">Phone: @Model?.Phone</li>
-        <li class="list-group-item">UserName: @Model.</li>
-    </ul>
 </div>

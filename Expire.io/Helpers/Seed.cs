@@ -23,6 +23,7 @@ namespace Expire.io.Helpers
 
         public void SeedUsers()
         {
+
             if (!_userManager.Users.Any())
             {
                 var userData = System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory().Split("\\bin\\Debug").First() + "\\Helpers", "UserSeedData.json"));
@@ -67,6 +68,7 @@ namespace Expire.io.Helpers
                     admin = _userManager.FindByNameAsync("Admin").Result;
 
                     _userManager.AddToRoleAsync(admin, "Admin").Wait();
+
                 }
             }
 

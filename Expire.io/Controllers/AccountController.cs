@@ -46,7 +46,8 @@ namespace Expire.io.Controllers
                         FirstName = model.FName,
                         LastName = model.LName,
                         Email = model.Email,
-                        UserName = model.Email
+                        UserName = model.Email,
+                        PhoneNumber = model.Phone
                     };
                     UserImage image = null;
                     if (model.Photo != null)

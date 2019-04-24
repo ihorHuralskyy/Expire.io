@@ -44,8 +44,13 @@
                         <ul class="nav navbar-nav">
                             <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                             <li><a asp-area="" asp-controller="Document" asp-action="Index">Documents</a></li>
-                            <li><a asp-area="" asp-controller="Admin" asp-action="AllUsers">Users</a></li>
-                        </ul>
+                            @{
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <li><a asp-area="" asp-controller="Admin" asp-action="AllUsers">Users</a></li>
+                                }
+                            }
+                            </ul>
                         <div id="rightInf">
                             <form asp-controller="Account" asp-action="LogOff">
                                 <p style="color: aliceblue">@User.Identity.Name</p>

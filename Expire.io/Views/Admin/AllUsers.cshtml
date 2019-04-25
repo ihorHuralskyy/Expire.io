@@ -4,6 +4,7 @@
 }
 @model System.Collections.Generic.IEnumerable<Expire.io.DTOs.UserDTORolesList>
 @using  Expire.io.DTOs;
+@using Microsoft.AspNet.Identity
 
 <div class="container" style="margin-top: 50px">
     <div class="row" style="margin: 20px">
@@ -22,9 +23,12 @@
                                     <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.FirstName - @item.LastName</p>
                                     <p class="list-group-item-text" id="descriptionRole">Admin</p>
                                 </div>
-                                <div style="width: 25%; display: inline-block; vertical-align: top">
-                                    <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger" style="float: right">Delete User</button>
-                                </div>
+                                if (User.Identity.GetUserName() != item.UserName)
+                                {
+                                    <div style="width: 25%; display: inline-block; vertical-align: top">
+                                        <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger" style="float: right">Delete User</button>
+                                    </div>
+                                }
                             }
                             else
                             {

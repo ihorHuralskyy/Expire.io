@@ -18,9 +18,9 @@
         <div class="col-sm-8">
             <h5 id="fullName">@Model.FirstName @Model.LastName</h5>
             <ul style="list-style-type: none" class="profilePageInf">
-                <li >Email: @Model.Email</li>
-                <li>Phone: @Model?.Phone</li>
-                <li>UserName: @Model.</li>
+                <li >Email: @Model.Email.ToString()</li>
+                <li>Phone: @Model.Phone</li>
+                <li>UserName: @Model.UserName</li>
             </ul>
         </div>
     </div>

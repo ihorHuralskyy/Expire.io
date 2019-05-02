@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Expire.io.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
 
@@ -120,7 +120,7 @@ namespace Expire.io.Controllers
             var result = _userManager.AddToRoleAsync(user, "Admin").Result;
             if (result.Succeeded == true)
             {
-                return Ok(Json(new { resp = user.UserName.ToString() + "was added to role Admin ", id = Id }));
+                return Ok(Json(new { resp = user.UserName.ToString() + " was added to role Admin ", id = Id }));
             }
             else
             {

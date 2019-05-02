@@ -19,9 +19,16 @@ $(document).ready(function() {
                 xhrFields: {
                     withCredentials: true
                 },
-                success: function(resp) {
-                    window.alert("User was successfull added");
-                    location.reload();
+                success: function (resp) {
+                    let myModel = $("#myModal");
+                    myModel.find(".modal-title")[0].textContent = "Create user";
+                    myModel.find(".modal-body").find("p")[0].textContent = "User was created succsesfully";
+
+                    $("#myModal").modal('show');
+
+                    myModel.on('hidden.bs.modal', function() {
+                        location.reload();
+                    })
                 },
                 fail: function(err) {
                     alert(err);
@@ -42,7 +49,12 @@ function deleteUser(user)
         data: {username : user.toString()},
         success: function (resp) {
             
-            window.alert(resp.value.resp);
+            let myModel = $("#myModal");
+            myModel.find(".modal-title")[0].textContent = "Delere user";
+            myModel.find(".modal-body").find("p")[0].textContent = resp.value.resp;
+
+            $("#myModal").modal('show');
+
             selector = '#' + resp.value.id;
             var toDelete = $(selector.toString());
             toDelete.remove();
@@ -56,17 +68,25 @@ function deleteUser(user)
     })
 }
 function aaa() {
-    var a = $("#13006").find(".adminButton");
-    a[0].style.display = "none";
-    console.log(a);
+    let myModel = $("#myModal");
+    myModel.find(".modal-title")[0].textContent = "Add role";
+    myModel.find(".modal-body").find("p")[0].textContent = resp.value.resp;
+
+    $("#myModal").modal('show');
 }
 function makeAnAdmin(user) {
     $.ajax({
         url: "/Admin/MakeUserAnAdmin",
         data: { username: user.toString() },
         success: function (resp) {
-          
-            window.alert(resp.value.resp);
+
+            let myModel = $("#myModal");
+            myModel.find(".modal-title")[0].textContent = "Add role";
+            myModel.find(".modal-body").find("p")[0].textContent = resp.value.resp;
+
+            $("#myModal").modal('show');
+
+
             selector = '#' + resp.value.id;
             var a = $(selector.toString()).find("p");
             a[1].textContent = "Admin";

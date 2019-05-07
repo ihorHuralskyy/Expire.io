@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Expire.io.DTOs;
 using Expire.io.Models.Data;
+using Expire.io.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,13 @@ namespace Expire.io.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var id = _context.Users.Where(u => u.UserName == User.Identity.Name).First().Id;
+            return View(_context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO {
+                Id = ud.Id,
+                Name = ud.Document.Name,
+                DateOfExpiry = ud.Document.DateOfExpiry,
+                TypeOfDocId = ud.Document.TypeOfDoc.Name
+            }).ToList());
         }
 
         [HttpGet("[action]")]
@@ -36,9 +43,15 @@ namespace Expire.io.Controllers
         }
 
         [HttpPost("[action]")]
+        public IActionResult CreateDocument(DocumentCreationViewModel model)
+        {
+            return Ok();
+        }
+
+        [HttpGet("[action]")]
         public IActionResult CreateDocument()
         {
-
+            return View();
         }
     }
 }

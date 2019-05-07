@@ -2,6 +2,69 @@
 @{
     ViewData["Title"] = "Index";
 }
+@model List<Expire.io.DTOs.DocumentDTO>
 
-<h2>Index</h2>
+<div class="container">
+    <div class="row" style="position: relative; margin-top: 20px;">
+        <div class="col-sm-6">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="license">License</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="insurance">Insurance</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="sertificate">Sertificate</button>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="documentSearch"placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="shuffleContainer" style="margin-bottom: 70px;">
+        @{
+            for (int i = 0; i < 16; i += 4)
+            {
+                    <div class="col-sm-3 filterItem" data-group='license'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 filterItem" data-group='sertificate'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 filterItem" data-group='sertificate'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 filterItem" data-group='insurance'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title1</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                        </div>
+                    </div>
+            }
+        }
+    </div>
+</div>
+
 

@@ -4,16 +4,9 @@
 // Write your JavaScript code.
 
 
-gridContainer = $("#shuffleContainer");
-var sizer = gridContainer.find(".col-sm-4");
-var shuffleInstance = new Shuffle(gridContainer, {
-    itemSelector: '.filterItem',
-    sizer: sizer // could also be a selector: '.my-sizer-element'
-});
-
-$(document).ready(function () {
+$(document).ready(function() {
     $('#ff').submit('click',
-        function (e) {
+        function(e) {
 
             let form = $(this);
             let data = form.serialize();
@@ -27,40 +20,28 @@ $(document).ready(function () {
                 xhrFields: {
                     withCredentials: true
                 },
-                success: function (resp) {
+                success: function(resp) {
                     let myModel = $("#myModal");
                     myModel.find(".modal-title")[0].textContent = "Create user";
                     myModel.find(".modal-body").find("p")[0].textContent = "User was created succsesfully";
 
                     $("#myModal").modal('show');
 
-                    myModel.on('hidden.bs.modal', function () {
-                        location.reload();
-                    })
+                    myModel.on('hidden.bs.modal',
+                        function() {
+                            location.reload();
+                        })
                 },
-                fail: function (err) {
+                fail: function(err) {
                     alert(err);
                 },
-                error: function (jqXHR, exception) {
+                error: function(jqXHR, exception) {
                     console.log(jqXHR.status + ' ' + exception);
                 }
             })
 
             return false;
         });
-
-    let searchDocument = $("#documentSearch")[0];
-    searchDocument.addEventListener('input', function() {
-        console.log(searchDocument.value);
-        var searchText = searchDocument.value.toLowerCase();
-
-        shuffleInstance.filter(function (element) {
-            var titleElement = element.querySelector('.card-title');
-            var titleText = titleElement.textContent.toLowerCase().trim();
-
-            return titleText.indexOf(searchText) !== -1;
-        });
-    });
 })
 
 function deleteUser(user) {
@@ -158,4 +139,21 @@ function filterElement(element) {
     }
 
 
+}
+
+function getModalForCreateDocument() {
+    $.ajax({
+        type: "get",
+        url: "/Document/CreateDocument",
+        success: function (resp) {
+            $('#dialogContent').html(resp);
+            $('#modDialog').modal('show');
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
 }

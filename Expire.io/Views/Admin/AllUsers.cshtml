@@ -20,7 +20,7 @@
                             if (@item.Roles.Where(r => r == "Admin").FirstOrDefault() != null)
                             {
                                 <div style="width: 65%; display: inline-block">
-                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.FirstName - @item.LastName</p>
+                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.UserName</p>
                                     <p class="list-group-item-text" id="descriptionRole">Admin</p>
                                 </div>
                                 if (User.Identity.GetUserName() != item.UserName)
@@ -33,7 +33,7 @@
                             else
                             {
                                 <div style="width: 65%; display: inline-block">
-                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.FirstName - @item.LastName</p>
+                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.UserName</p>
                                     <p class="list-group-item-text" id="descriptionRole">User</p>
                                 </div>
                                 <div style="width: 25%; display: inline-block; vertical-align: top">
@@ -55,8 +55,8 @@
     <!-- Modal content-->
     <div class="modal-content" >
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Modal Header</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
             <p>Some text in the modal.</p>

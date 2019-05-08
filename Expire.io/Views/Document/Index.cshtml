@@ -6,16 +6,19 @@
 
 <div class="container">
     <div class="row" style="position: relative; margin-top: 20px;">
-        <div class="col-sm-6">
+        <div class="col-md-5">
             <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="license">License</button>
                 <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="insurance">Insurance</button>
                 <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="sertificate">Sertificate</button>
             </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-3">
+            <button class="btn btn-outline-secondary" onclick="getModalForCreateDocument()">Create document</button>
+        </div>
+        <div class="col-md-4">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" id="documentSearch"placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" id="documentSearch" placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button">Search</button>
                 </div>
@@ -26,45 +29,76 @@
         @{
             for (int i = 0; i < 16; i += 4)
             {
-                    <div class="col-sm-3 filterItem" data-group='license'>
-                        <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
+                <div class="col-md-3 filterItem" data-group='license'>
+                    <div class="card">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                     </div>
-                    <div class="col-sm-3 filterItem" data-group='sertificate'>
-                        <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
+                </div>
+                <div class="col-md-3 filterItem" data-group='sertificate'>
+                    <div class="card">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                     </div>
-                    <div class="col-sm-3 filterItem" data-group='sertificate'>
-                        <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
+                </div>
+                <div class="col-md-3 filterItem" data-group='sertificate'>
+                    <div class="card">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                     </div>
-                    <div class="col-sm-3 filterItem" data-group='insurance'>
-                        <div class="card">
-                            <img class="card-img-top" src="..." alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title1</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
+                </div>
+                <div class="col-md-3 filterItem" data-group='insurance'>
+                    <div class="card">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title1</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         </div>
                     </div>
+                </div>
             }
         }
     </div>
 </div>
+<div class="modal fade" id="modDialog" role="dialog">
+    <div id="dialogContent" class="modal-dialog">
+    </div>
+</div>
 
+<script>
+    gridContainer = $("#shuffleContainer");
+    var sizer = gridContainer.find(".col-md-3");
+    var shuffleInstance = new Shuffle(gridContainer, {
+        itemSelector: '.filterItem',
+        sizer: sizer // could also be a selector: '.my-sizer-element'
+    });
 
+    let searchDocument = $("#documentSearch")[0];
+    searchDocument.addEventListener('input', function () {
+        console.log(searchDocument.value);
+        var searchText = searchDocument.value.toLowerCase();
+
+        let button1 = $("[doc_type='license']");
+        let button2 = $("[doc_type='insurance']");
+        let button3 = $("[doc_type='sertificate']");
+        button1[0].className = "btn btn-outline-secondary";
+        button2[0].className = "btn btn-outline-secondary";
+        button3[0].className = "btn btn-outline-secondary";
+
+        shuffleInstance.filter(function (element) {
+            var titleElement = element.querySelector('.card-title');
+            var titleText = titleElement.textContent.toLowerCase().trim();
+
+            return titleText.indexOf(searchText) !== -1;
+        });
+    });
+</script>

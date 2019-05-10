@@ -27,44 +27,44 @@
     </div>
     <div class="row" id="shuffleContainer" style="margin-bottom: 70px;">
         @{
-            for (int i = 0; i < 16; i += 4)
+            for (int i = 0; i <@Model.Count; ++i)
             {
-                <div class="col-md-3 filterItem" data-group='license'>
-                    <div class="card">
-                        <img class="card-img-top" src="..." alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                if (@Model[i].TypeOfDocId.ToLower() == "license")
+                {
+                    <div class="col-md-3 filterItem" data-group='license'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                                <p class="card-text">@Model[i].Name</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 filterItem" data-group='sertificate'>
-                    <div class="card">
-                        <img class="card-img-top" src="..." alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                }
+                else if (@Model[i].TypeOfDocId.ToLower() == "insurance")
+                {
+                    <div class="col-md-3 filterItem" data-group='insurance'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                                <p class="card-text">@Model[i].Name</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 filterItem" data-group='sertificate'>
-                    <div class="card">
-                        <img class="card-img-top" src="..." alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                }
+                else if (@Model[i].TypeOfDocId.ToLower() == "sertificate")
+                {
+                    <div class="col-md-3 filterItem" data-group='sertificate'>
+                        <div class="card">
+                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                                <p class="card-text">@Model[i].Name</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 filterItem" data-group='insurance'>
-                    <div class="card">
-                        <img class="card-img-top" src="..." alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title1</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        </div>
-                    </div>
-                </div>
+                }
             }
         }
     </div>
@@ -78,6 +78,7 @@
     gridContainer = $("#shuffleContainer");
     var sizer = gridContainer.find(".col-md-3");
     var shuffleInstance = new Shuffle(gridContainer, {
+
         itemSelector: '.filterItem',
         sizer: sizer // could also be a selector: '.my-sizer-element'
     });

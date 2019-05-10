@@ -127,5 +127,20 @@ namespace Expire.io.Controllers
                 return BadRequest(Json(new { resp = "Unexpected server error" }));
             }
         }
+
+        public IActionResult MakeUserAnManager(string username)
+        {
+            var user = _userManager.Users.Where(u => u.UserName == username).First();
+            int Id = user.Id;
+            var result = _userManager.AddToRoleAsync(user, "Manager").Result;
+            if (result.Succeeded == true)
+            {
+                return Ok(Json(new { resp = user.UserName.ToString() + " was added to role Manager ", id = Id }));
+            }
+            else
+            {
+                return BadRequest(Json(new { resp = "Unexpected server error" }));
+            }
+        }
     }
 }

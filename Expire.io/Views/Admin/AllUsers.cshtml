@@ -8,37 +8,75 @@
 
 <div class="container" style="margin-top: 50px">
     <div class="row" style="margin: 20px">
-        <button  class="btn btn-outline-secondary" onclick="location.href = '@Url.Action("CreateUser", "Admin")'">Create User</button>
+        <button class="btn btn-outline-secondary" onclick="location.href = '@Url.Action("CreateUser", "Admin")'">Create User</button>
     </div>
     <ul class="list-group list-group-flush">
         @{
             foreach (Expire.io.DTOs.UserDTORolesList item in @Model)
             {
-                <li class="list-group-item  list-group-item-info" id="@item.Id">
-                    <div class="bmd-list-group-col" style="display: inline !important">
+                <li class="list-group-item list-group-item-secondary allUsersList" id="@item.Id" style="border-radius: 5px;">
+                    <div class="bmd-list-group-col" style="display: inline !important; ">
                         @{
                             if (@item.Roles.Where(r => r == "Admin").FirstOrDefault() != null)
                             {
                                 <div style="width: 65%; display: inline-block">
-                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.UserName</p>
+                                    <p class="list-group-item-heading userNameParagraph" style="font-size: 20px;font-weight: bold" onclick="location.href = '@Url.Action("GetAllDocumentsByUser", "Document", new {userName = @item.UserName})'">@item.UserName</p>
                                     <p class="list-group-item-text" id="descriptionRole">Admin</p>
                                 </div>
                                 if (User.Identity.GetUserName() != item.UserName)
                                 {
-                                    <div style="width: 25%; display: inline-block; vertical-align: top">
-                                        <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger" style="float: right">Delete User</button>
+                                    <div style="width: 30%; display: inline-block; vertical-align: top">
+                                        <div class="row">
+                                            <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto">Delete</button>
+                                        </div>
                                     </div>
                                 }
+                            }
+                            else if (@item.Roles.Where(r => r == "Manager").FirstOrDefault() != null)
+                            {
+                                <div style="width: 65%; display: inline-block">
+                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold" onclick="location.href = '@Url.Action("GetAllDocumentsByUser", "Document", new {userName = @item.UserName})'">@item.UserName</p>
+                                    <p class="list-group-item-text" id="descriptionRole">Manager</p>
+                                </div>
+                                <div style="width: 30%; display: inline-block; vertical-align: top">
+                                    <div class="row">
+                                        <div class="dropdown ml-auto">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAddToRole" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Add role ...
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a onclick="makeAnAdmin('@item.UserName.ToString()')" class="dropdown-item adminButton ">Admin</a>
+                                            </div>
+                                        </div>
+                                        <button type="button" onclick="makeAn('@item.UserName.ToString()')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
+                                    </div>
+                                    <div class="row">
+                                        <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto" style="margin-top: 7px">Delete</button>
+                                    </div>
+                                </div>
                             }
                             else
                             {
                                 <div style="width: 65%; display: inline-block">
-                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold">@item.UserName</p>
+                                    <p class="list-group-item-heading" style="font-size: 20px;font-weight: bold" onclick="location.href = '@Url.Action("GetAllDocumentsByUser", "Document", new {userName = @item.UserName})'">@item.UserName</p>
                                     <p class="list-group-item-text" id="descriptionRole">User</p>
                                 </div>
-                                <div style="width: 25%; display: inline-block; vertical-align: top">
-                                    <button type="button" onclick="makeAnAdmin('@item.UserName.ToString()')" class="btn btn-secondary adminButton">Make an admin</button>
-                                    <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger" style="float: right">Delete User</button>
+                                <div style="width: 30%; display: inline-block; vertical-align: top">
+                                    <div class="row">
+                                        <div class="dropdown ml-auto">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAddToRole" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Add role ...
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a onclick="makeAnManager('@item.UserName.ToString()')" style="" class="dropdown-item adminButton ">Manager</a>
+                                                <a onclick="makeAnAdmin('@item.UserName.ToString()')" class="dropdown-item adminButton ">Admin</a>
+                                            </div>
+                                        </div>
+                                        <button type="button" onclick="makeAn('@item.UserName.ToString()')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
+                                    </div>
+                                    <div class="row">
+                                        <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto" style="margin-top: 7px">Delete</button>
+                                    </div>
                                 </div>
                             }
                         }
@@ -50,22 +88,31 @@
 </div>
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
-<div class="modal-dialog">
-    
-    <!-- Modal content-->
-    <div class="modal-content" >
-        <div class="modal-header">
-            <h4 class="modal-title">Modal Header</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Header</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
-        <div class="modal-body">
-            <p>Some text in the modal.</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+
     </div>
-      
 </div>
 
-
+<script>
+    $(".allUsersList").hover(function () {
+        $(this).removeClass("list-group-item-secondary");
+        $(this).addClass("list-group-item-dark");
+    }, function () {
+        $(this).removeClass("list-group-item-dark");
+        $(this).addClass("list-group-item-secondary");
+    });
+</script>

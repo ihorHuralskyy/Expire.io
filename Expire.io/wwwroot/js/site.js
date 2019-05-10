@@ -92,6 +92,40 @@ function makeAnAdmin(user) {
             var a = $(selector.toString()).find("p");
             a[1].textContent = "Admin";
             var b = $(selector.toString()).find(".adminButton");
+            for (i = 0; i < b.length; ++i) {
+                b[i].style.display = "none";
+            }
+
+
+            $(selector.toString()).find(".dropdown")[0].style.display = "none";
+            $(selector.toString()).find(".giveToManager")[0].style.display = "none";
+
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
+}
+function makeAnManager(user) {
+    $.ajax({
+        url: "/Admin/MakeUserAnManager",
+        data: { username: user.toString() },
+        success: function (resp) {
+
+            let myModel = $("#myModal");
+            myModel.find(".modal-title")[0].textContent = "Add role";
+            myModel.find(".modal-body").find("p")[0].textContent = resp.value.resp;
+
+            $("#myModal").modal('show');
+
+
+            selector = '#' + resp.value.id;
+            var a = $(selector.toString()).find("p");
+            a[1].textContent = "Manager";
+            var b = $(selector.toString()).find(".adminButton");
             b[0].style.display = "none";
         },
         fail: function (err) {
@@ -156,4 +190,8 @@ function getModalForCreateDocument() {
             console.log(jqXHR.status + ' ' + exception);
         }
     })
+}
+
+function getAllDocumentsByUser(user) {
+
 }

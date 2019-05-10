@@ -36,12 +36,14 @@ namespace Expire.io.Controllers
             }).ToList());
         }
 
-        [HttpGet("[action]")]
-        public IActionResult GetAllDocumentsByUser()
+        [HttpGet]
+        public IActionResult GetAllDocumentsByUser(string userName)
         {
-            var id = _context.Users.Where(u => u.UserName == User.Identity.Name).First().Id;
-            return Ok(_context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new
+            var id = _context.Users.Where(u => u.UserName == userName).First().Id;
+            ViewBag.UserName = userName;
+            return View(_context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
             {
+                Id = ud.Id,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
                 TypeOfDocId = ud.Document.TypeOfDoc.Name

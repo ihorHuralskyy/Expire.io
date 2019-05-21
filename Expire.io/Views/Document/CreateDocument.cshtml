@@ -55,7 +55,9 @@
             var token = $("input[name^=__RequestVerificationToken]").val();
             data.append('__RequestVerificationToken', token.toString());
             for (var [key, value] of data.entries()) { 
-                console.log(key, value);
+                if (key == "DateOfExpiry") {
+                    data.append("datetime", value);
+                }
             }
             debugger;
             $.ajax({

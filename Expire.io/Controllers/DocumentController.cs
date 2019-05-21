@@ -29,13 +29,17 @@ namespace Expire.io.Controllers
         public IActionResult Index()
         {
             var id = _context.Users.Where(u => u.UserName == User.Identity.Name).First().Id;
-            return View(_context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
+            var list = _context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
             {
                 Id = ud.Id,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
-                TypeOfDocId = ud.Document.TypeOfDoc.Name
-            }).ToList());
+                TypeOfDocId = ud.Document.TypeOfDoc.Name,
+                Image = Convert.ToBase64String(_context.DocumentImages
+                    .FirstOrDefault(item => item.DocumentId == ud.DocumentId).Image)
+            }).ToList();
+
+            return View(list);
         }
 
         [HttpGet]
@@ -49,7 +53,7 @@ namespace Expire.io.Controllers
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
                 TypeOfDocId = ud.Document.TypeOfDoc.Name,
-                Image = _context.DocumentImages.FirstOrDefault(item=>item.DocumentId == ud.DocumentId).Image
+                Image = Convert.ToBase64String(_context.DocumentImages.FirstOrDefault(item=>item.DocumentId == ud.DocumentId).Image)
             }).ToList());
         }
 
@@ -94,12 +98,15 @@ namespace Expire.io.Controllers
                 }
 
                 _context.DocumentImages.Add(dc);
-               
 
+                var a = model.datetime.Split("-");
+                var b = a[2].Split("T");
+                var c = b[1].Split(":");
+                DateTime time = new DateTime(int.Parse(a[0]),int.Parse(a[1]), int.Parse(b[0]),int.Parse(c[0]),int.Parse(c[1]),0);
                 Document docToCreate = new Document
                 {
                     Name = model.Name,
-                    DateOfExpiry = model.DateOfExpiry,
+                    DateOfExpiry = time,
                     TypeOfDoc = type,
                     Image = dc
                 };
@@ -111,7 +118,7 @@ namespace Expire.io.Controllers
                 };
                 _context.Documents.Add(docToCreate);
                 _context.UserDocuments.Add(ud);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return Json(new { data = $"{model.TypeOfDocId} for {model.UserName} was created successfuly", color = "#353A40" });
             }
         }

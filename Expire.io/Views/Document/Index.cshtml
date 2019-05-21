@@ -37,7 +37,20 @@
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocId</h5>
                                 <p class="card-text">@Model[i].Name</p>
-                                <hr style="border-color: red; border-width: 4px" />
+                                @{
+                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays >14 )
+                                    {
+                                        <hr style="border-color: green; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 3)
+                                    {
+                                        <hr style="border-color: red; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 14)
+                                    {
+                                        <hr style="border-color: orange; border-width: 4px" />
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -50,7 +63,20 @@
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocId</h5>
                                 <p class="card-text">@Model[i].Name</p>
-                                <hr style="border-color: red; border-width: 4px" />
+                                @{
+                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays >14 )
+                                    {
+                                        <hr style="border-color: green; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 3)
+                                    {
+                                        <hr style="border-color: red; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 14)
+                                    {
+                                        <hr style="border-color: orange; border-width: 4px" />
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
@@ -63,7 +89,20 @@
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocId</h5>
                                 <p class="card-text">@Model[i].Name</p>
-                                <hr style="border-color: red; border-width: 4px" />
+                                @{
+                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays > 14)
+                                    {
+                                        <hr style="border-color: green; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 3)
+                                    {
+                                        <hr style="border-color: red; border-width: 4px" />
+                                    }
+                                    else if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays < 14)
+                                    {
+                                        <hr style="border-color: orange; border-width: 4px" />
+                                    }
+                                }
                             </div>
                         </div>
                     </div>

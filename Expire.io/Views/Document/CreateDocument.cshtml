@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewData["Title"] = "CreateDocument";
+}
+@model Expire.io.ViewModels.DocumentCreationViewModel;
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">Create document</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div class="modal-body">
+        <form id="docForm">
+            <div class="form-group">
+                <label asp-for="TypeOfDocId">Type</label>
+                <select class="form-control" asp-for="TypeOfDocId">
+                    <option value="License">License</option>
+                    <option value="Sertificate">Sertificate</option>
+                    <option value="Insurance">Insurance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfExpiry"></label>
+                <input asp-for="DateOfExpiry" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="file" id="file" asp-for="Photo" /><br>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-secondary" id="sudmitButton" />
+            </div>
+        </form>
+        <div id="docCreationResult" style="display: none">
+            <h3>Result</h3>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div>
+<script>
+    $(document).ready($('#docForm').submit('click',
+        function (e) {
+            e.preventDefault();
+            let form = $(this);
+            let data = new FormData($("#docForm")[0]);
+            var token = $("input[name^=__RequestVerificationToken]").val();
+            data.append('__RequestVerificationToken', token.toString());
+            for (var [key, value] of data.entries()) { 
+                if (key == "DateOfExpiry") {
+                    data.append("datetime", value);
+                }
+            }
+            debugger;
+            $.ajax({
+                type: "post",
+                url: "/Document/CreateDocument",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (resp) {
+                    console.log(resp);
+                    $("#docCreationResult h3")[0].innerText = resp.data;
+                    $("#docCreationResult h3")[0].style.color = resp.color;
+                    $("#docCreationResult").show();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest);
+                }
+                //statusCode: {
+                //    400: function (resp) {
+                //        console.log(resp);
+                //        $("#docCreationResult h3")[0].innerText = resp.value.data;
+                //        $("#docCreationResult h3")[0].style.color = resp.value.color;
+                //        $("#docCreationResult").show();
+                //    }
+                //}
+            })
+            return false;
+        }))
+
+   
+</script>

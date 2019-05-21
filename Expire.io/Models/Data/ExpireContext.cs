@@ -17,6 +17,7 @@ namespace Expire.io.Models.Data
         public DbSet<UserDocument> UserDocuments { get; set; }
         public DbSet<TypeOfDoc> TypeOfDocs { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<ManagerUser> ManagerUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

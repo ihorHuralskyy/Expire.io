@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewData["Title"] = "GetAllDocumentsByUser";
+}
+@model List<Expire.io.DTOs.DocumentDTO>
+<div class="row" style="position: relative; margin-top: 20px;">
+    <div class="col-md-8">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="license">License</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="insurance">Insurance</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="sertificate">Sertificate</button>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="documentSearch" placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+<h3>Documents by @ViewBag.UserName</h3>
+<div class="row" id="shuffleContainer" style="margin-bottom: 70px;">
+    @{
+        for (int i = 0; i < @Model.Count; ++i)
+        {
+            if (@Model[i].TypeOfDocId.ToLower() == "license")
+            {
+                <div class="col-md-3 filterItem" data-group='license'>
+                    <div class="card shadow">
+                        <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                            <p class="card-text">@Model[i].Name</p>
+                            <hr style="border-color: red; border-width: 4px"/>
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (@Model[i].TypeOfDocId.ToLower() == "insurance")
+            {
+                <div class="col-md-3 filterItem" data-group='insurance'>
+                    <div class="card shadow">
+                        <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                            <p class="card-text">@Model[i].Name</p>
+                            <hr style="border-color: red; border-width: 4px" />
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (@Model[i].TypeOfDocId.ToLower() == "sertificate")
+            {
+                <div class="col-md-3 filterItem" data-group='sertificate'>
+                    <div class="card shadow">
+                        <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model[i].TypeOfDocId</h5>
+                            <p class="card-text">@Model[i].Name</p>
+                            <hr style="border-color: red; border-width: 4px" />
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+

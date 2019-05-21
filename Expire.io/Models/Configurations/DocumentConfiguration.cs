@@ -12,7 +12,7 @@ namespace Expire.io.Models.Configurations
             builder.HasKey(d => d.Id);
 
             builder.Property(d => d.Name).HasMaxLength(40).IsRequired(true);
-            builder.HasIndex(d => d.Name).IsUnique(true);
+            //builder.HasIndex(d => d.Name).IsUnique(true);
 
             builder.Property(d => d.DateOfExpiry).IsRequired(false).HasColumnType("date");
 

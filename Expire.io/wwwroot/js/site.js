@@ -4,9 +4,9 @@
 // Write your JavaScript code.
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('#ff').submit('click',
-        function(e) {
+        function (e) {
 
             let form = $(this);
             let data = form.serialize();
@@ -20,7 +20,7 @@ $(document).ready(function() {
                 xhrFields: {
                     withCredentials: true
                 },
-                success: function(resp) {
+                success: function (resp) {
                     let myModel = $("#myModal");
                     myModel.find(".modal-title")[0].textContent = "Create user";
                     myModel.find(".modal-body").find("p")[0].textContent = "User was created succsesfully";
@@ -28,21 +28,25 @@ $(document).ready(function() {
                     $("#myModal").modal('show');
 
                     myModel.on('hidden.bs.modal',
-                        function() {
+                        function () {
                             location.reload();
                         })
                 },
-                fail: function(err) {
+                fail: function (err) {
                     alert(err);
                 },
-                error: function(jqXHR, exception) {
+                error: function (jqXHR, exception) {
                     console.log(jqXHR.status + ' ' + exception);
                 }
             })
 
             return false;
-        });
+        }
+    );
+
 })
+
+
 
 function deleteUser(user) {
     $.ajax({
@@ -148,21 +152,21 @@ function filterElement(element) {
         if (element.getAttribute('doc_type') == 'license') {
             button2[0].className = "btn btn-outline-secondary";
             button3[0].className = "btn btn-outline-secondary";
-            shuffleInstance.filter(function(el) {
+            shuffleInstance.filter(function (el) {
                 return el.getAttribute('data-group') == 'license';
             });
         }
         else if (element.getAttribute('doc_type') == 'insurance') {
             button1[0].className = "btn btn-outline-secondary";
             button3[0].className = "btn btn-outline-secondary";
-            shuffleInstance.filter(function(el) {
+            shuffleInstance.filter(function (el) {
                 return el.getAttribute('data-group') == 'insurance';
             });
         }
         else if (element.getAttribute('doc_type') == 'sertificate') {
             button2[0].className = "btn btn-outline-secondary";
             button1[0].className = "btn btn-outline-secondary";
-            shuffleInstance.filter(function(el) {
+            shuffleInstance.filter(function (el) {
                 return el.getAttribute('data-group') == 'sertificate';
             });
         }
@@ -191,7 +195,89 @@ function getModalForCreateDocument() {
         }
     })
 }
+function getModalForGiveToManager(userId) {
+    $.ajax({
+        type: "get",
+        url: "/Admin/GetManagerList",
+        success: function (resp) {
+            $('#dialogContetntForGiveToManager').html(resp);
+            $('#modalForGiveToManager').modal('show');
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
 
-function getAllDocumentsByUser(user) {
+    window.localStorage.setItem('userId', userId);
+}
+function giveToManager(managerUserName) {
+    let userId = window.localStorage.getItem('userId');
+    clearFromStorage();
+    $.ajax({
+        type: "get",
+        url: "/Admin/GiveToManager",
+        data: {
+            managerName: managerUserName,
+            userId:userId
+        },
+        success: function (resp) {
+            $('#modalForGiveToManager').modal('hide');
+            let myModel = $("#myModal");
+            myModel.find(".modal-title")[0].textContent = "Add to manager";
+            myModel.find(".modal-body").find("p")[0].textContent = resp.resp;
+            $("#myModal").modal('show');
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
 
+}
+
+function clearFromStorage() {
+    window.localStorage.removeItem("userId");
+}
+
+
+function createForm() {
+    $("#docForm").submit('click', function() {
+        let photo = $('#file')[0].files[0];
+        let data = new FormData(this);
+        //let data = $('#docForm').serialize();
+        var token = $("input[name^=__RequestVerificationToken]").val();
+        data.append('&__RequestVerificationToken=' + token);
+
+
+        $.ajax({
+            type: "post",
+            url: "/Document/CreateDocument",
+            data: data,
+            success: function (resp) {
+                console.log(resp);
+                $("#docCreationResult h3")[0].innerText = resp.data;
+                $("#docCreationResult h3")[0].style.color = resp.color;
+                $("#docCreationResult").show();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+            }
+            //statusCode: {
+            //    400: function (resp) {
+            //        console.log(resp);
+            //        $("#docCreationResult h3")[0].innerText = resp.value.data;
+            //        $("#docCreationResult h3")[0].style.color = resp.value.color;
+            //        $("#docCreationResult").show();
+            //    }
+            //}
+
+        })
+        return false;
+
+    })
 }

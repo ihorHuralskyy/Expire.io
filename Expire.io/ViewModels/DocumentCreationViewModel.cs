@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+using SixLabors.ImageSharp;
 
 namespace Expire.io.ViewModels
 {
@@ -13,5 +15,6 @@ namespace Expire.io.ViewModels
         public string UserName { get; set; }
         public DateTime? DateOfExpiry { get; set; }
         public string TypeOfDocId { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

@@ -48,7 +48,7 @@
                                                 <a onclick="makeAnAdmin('@item.UserName.ToString()')" class="dropdown-item adminButton ">Admin</a>
                                             </div>
                                         </div>
-                                        <button type="button" onclick="makeAn('@item.UserName.ToString()')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
+                                        <button type="button" onclick="getModalForGiveToManager('@item.Id')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
                                     </div>
                                     <div class="row">
                                         <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto" style="margin-top: 7px">Delete</button>
@@ -72,7 +72,7 @@
                                                 <a onclick="makeAnAdmin('@item.UserName.ToString()')" class="dropdown-item adminButton ">Admin</a>
                                             </div>
                                         </div>
-                                        <button type="button" onclick="makeAn('@item.UserName.ToString()')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
+                                        <button type="button" onclick="getModalForGiveToManager('@item.Id')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
                                     </div>
                                     <div class="row">
                                         <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto" style="margin-top: 7px">Delete</button>
@@ -104,6 +104,11 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="modal fade" id="modalForGiveToManager" role="dialog">
+    <div id="dialogContetntForGiveToManager" class="modal-dialog modal-dialog-scrollable">
     </div>
 </div>
 

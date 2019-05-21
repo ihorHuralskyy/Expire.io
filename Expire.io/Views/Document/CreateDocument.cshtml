@@ -32,6 +32,9 @@
                 <input asp-for="DateOfExpiry" class="form-control" />
             </div>
             <div class="form-group">
+                <input type="file" id="file" asp-for="Photo" /><br>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-secondary" id="sudmitButton" />
             </div>
         </form>
@@ -45,15 +48,23 @@
 </div>
 <script>
     $(document).ready($('#docForm').submit('click',
-        function(e) {
+        function (e) {
+            e.preventDefault();
             let form = $(this);
-            let data = form.serialize();
+            let data = new FormData($("#docForm")[0]);
             var token = $("input[name^=__RequestVerificationToken]").val();
-            data += '&__RequestVerificationToken=' + token;
+            data.append('__RequestVerificationToken', token.toString());
+            for (var [key, value] of data.entries()) { 
+                console.log(key, value);
+            }
+            debugger;
             $.ajax({
                 type: "post",
                 url: "/Document/CreateDocument",
                 data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (resp) {
                     console.log(resp);
                     $("#docCreationResult h3")[0].innerText = resp.data;
@@ -71,8 +82,9 @@
                 //        $("#docCreationResult").show();
                 //    }
                 //}
-
             })
             return false;
         }))
+
+   
 </script>

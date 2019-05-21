@@ -9,7 +9,6 @@ namespace Expire.io.Models.Entities
         public string LastName { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
         public UserImage Image { get; set; }
-        public int? ManagerId { get; set; }
         public ICollection<UserDocument> UserDocuments { get; set; }
     }
 }

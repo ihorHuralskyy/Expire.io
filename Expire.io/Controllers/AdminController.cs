@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Diagnostics;
 using Expire.io.DTOs;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Expire.io.Controllers
@@ -24,7 +25,7 @@ namespace Expire.io.Controllers
         private readonly ExpireContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
-        public AdminController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sg, RoleManager<Role>  rm)
+        public AdminController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sg, RoleManager<Role> rm)
         {
             _userManager = userManager;
             _context = context;
@@ -46,7 +47,7 @@ namespace Expire.io.Controllers
 
             foreach (var item in allUsers)
             {
-                item.Roles = await _userManager.GetRolesAsync(_userManager.Users.Where(u=>u.UserName ==item.UserName).First());
+                item.Roles = await _userManager.GetRolesAsync(_userManager.Users.Where(u => u.UserName == item.UserName).First());
             }
             return View(allUsers.ToList());
         }
@@ -56,7 +57,7 @@ namespace Expire.io.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(AdminAddUserViewModel model)
         {
@@ -96,7 +97,7 @@ namespace Expire.io.Controllers
             return BadRequest("Your data is not valid");
         }
 
- 
+
         public async Task<IActionResult> DeleteUser(string username)
         {
 
@@ -105,11 +106,11 @@ namespace Expire.io.Controllers
             var result = _userManager.DeleteAsync(user).Result;
             if (result.Succeeded == true)
             {
-                return Ok(Json(new {resp = "User was deleted", id = Id}));
+                return Ok(Json(new { resp = "User was deleted", id = Id }));
             }
             else
             {
-                return BadRequest(Json(new {resp = "Unexpected server error"}));
+                return BadRequest(Json(new { resp = "Unexpected server error" }));
             }
         }
 
@@ -140,6 +141,41 @@ namespace Expire.io.Controllers
             else
             {
                 return BadRequest(Json(new { resp = "Unexpected server error" }));
+            }
+        }
+
+        public IActionResult GetManagerList()
+        {
+
+            int roleId = _roleManager.Roles.FirstOrDefault(item => item.Name == "manager").Id;
+
+            var list = _context.UserRoles.Where(item => item.RoleId == roleId).Select(u => _userManager.Users.FirstOrDefault(uu => uu.Id == u.UserId).UserName).ToList();
+
+            return PartialView(list);
+        }
+
+        public IActionResult GiveToManager(string managerName, int userId)
+        {
+            int managerId = _userManager.Users.FirstOrDefault(item => item.UserName == managerName).Id;
+
+            var res = _context.ManagerUsers.FirstOrDefault(item =>
+                item.ManagerId == managerId && item.UserId == userId);
+            if (res != null)
+            {
+                return Json(new { resp = "User is already added" });
+            }
+            else
+            {
+                ManagerUser managerUser = new ManagerUser
+                {
+                    UserId = userId,
+                    ManagerId = managerId
+                };
+
+                _context.ManagerUsers.Add(managerUser);
+                _context.SaveChanges();
+                HttpContext.Response.StatusCode = 200;
+                return Json(new { resp = "User was added to manager" });
             }
         }
     }

@@ -45,7 +45,6 @@ namespace Expire.io.Controllers
                 Email = user.Email,
                 Id = user.Id,
                 Phone = user.PhoneNumber,
-                ManagerId = user.ManagerId,
                 UserName = user.UserName,
                 Roles = roles.Select(r => new RoleDTO() { Name = r }).ToList()
             };

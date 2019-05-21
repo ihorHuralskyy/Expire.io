@@ -9,6 +9,8 @@ using Expire.io.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using SixLabors.ImageSharp;
 
 namespace Expire.io.Controllers
 {
@@ -46,7 +48,8 @@ namespace Expire.io.Controllers
                 Id = ud.Id,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
-                TypeOfDocId = ud.Document.TypeOfDoc.Name
+                TypeOfDocId = ud.Document.TypeOfDoc.Name,
+                Image = _context.DocumentImages.FirstOrDefault(item=>item.DocumentId == ud.DocumentId).Image
             }).ToList());
         }
 
@@ -81,13 +84,26 @@ namespace Expire.io.Controllers
                         type = _context.TypeOfDocs.Where(t => t.Name == "insurance").First();
                         break;
                 }
+
+                DocumentImage dc;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    model.Photo.CopyTo(ms);
+                    byte[] img = ms.ToArray();
+                    dc = new DocumentImage {Image = img};
+                }
+
+                _context.DocumentImages.Add(dc);
+               
+
                 Document docToCreate = new Document
                 {
                     Name = model.Name,
                     DateOfExpiry = model.DateOfExpiry,
                     TypeOfDoc = type,
-                    Image = null
+                    Image = dc
                 };
+                dc.Document = docToCreate;
                 UserDocument ud = new UserDocument
                 {
                     User = user,

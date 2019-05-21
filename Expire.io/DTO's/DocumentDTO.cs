@@ -11,5 +11,6 @@ namespace Expire.io.DTOs
         public string Name { get; set; }
         public DateTime? DateOfExpiry { get; set; }
         public string TypeOfDocId { get; set; }
+        public byte[] Image { get; set; }
     }
 }

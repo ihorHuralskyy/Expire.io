@@ -56,16 +56,18 @@ namespace Expire.io.Helpers
 
                 var admin = new User
                 {
-                    UserName = "Admin",
+                    UserName = "admin@gmail.com",
                     FirstName = "Sebastian",
                     LastName = "Laursen"
                 };
+
+                admin.Email = "admin@gmail.com";
 
                 IdentityResult result = _userManager.CreateAsync(admin, "password").Result;
 
                 if (result.Succeeded)
                 {
-                    admin = _userManager.FindByNameAsync("Admin").Result;
+                    admin = _userManager.FindByNameAsync("admin@gmail.com").Result;
 
                     _userManager.AddToRoleAsync(admin, "Admin").Wait();
 

@@ -7,6 +7,8 @@ using Expire.io.Models.Entities;
 using Newtonsoft.Json;
 using Expire.io.ViewModels;
 using System.IO;
+using Expire.io.Models.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Expire.io.Helpers
 {
@@ -14,11 +16,13 @@ namespace Expire.io.Helpers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
+        private readonly ExpireContext _context;
 
-        public Seed(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public Seed(UserManager<User> userManager, RoleManager<Role> roleManager, ExpireContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public void SeedUsers()
@@ -74,6 +78,14 @@ namespace Expire.io.Helpers
                 }
             }
 
+        }
+
+        public void CheckAndSend()
+        {
+            /*var list = _context.Documents.Where(item => (item.DateOfExpiry.Value - DateTime.Now).TotalDays < 0)
+                .ToList();*/
+            EmailSender sender = new EmailSender();
+            sender.SendEmail("tarikkataryna1999@gmail.com","Taras","Kataryna","Java license");
         }
     }
 }

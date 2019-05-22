@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Expire.io.Helpers;
 using Expire.io.Models.Data;
 using Expire.io.Models.Entities;
-
+using Expire.io.Services;
+using Expire.io.Services.Contracts;
 
 namespace Expire.io
 {
@@ -36,6 +37,17 @@ namespace Expire.io
             })
                  .AddEntityFrameworkStores<ExpireContext>();
             services.AddTransient<Seed>();
+
+            services.AddScoped<IAdminService, AdminService>();
+
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<IDocumentService, DocumentService>();
+
+            services.AddScoped<IHomeService, HomeService>();
+
+            services.AddHttpContextAccessor();
+
             services.AddAuthorization(opts =>
             {
                 opts.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));

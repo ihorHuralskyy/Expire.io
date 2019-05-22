@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Expire.io.Models.Data;
-using Expire.io.Models.Entities;
 using Expire.io.ViewModels;
+using Expire.io.Services.Contracts;
 
 namespace Expire.io.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly ExpireContext _context;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ExpireContext context)
+        private readonly IAccountService _accountService;
+        public AccountController(
+            IAccountService accountService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _context = context;
+            _accountService = accountService;
         }
         [HttpGet]
         public IActionResult Register()
@@ -41,35 +33,9 @@ namespace Expire.io.Controllers
             {
                 try
                 {
-                    User user = new User()
-                    {
-                        FirstName = model.FName,
-                        LastName = model.LName,
-                        Email = model.Email,
-                        UserName = model.Email,
-                        PhoneNumber = model.Phone
-                    };
-                    UserImage image = null;
-                    if (model.Photo != null)
-                    {
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            model.Photo.CopyTo(ms);
-                            byte[] img = ms.ToArray();
-                            image = new UserImage { Image = img };
-                        }
-                    }
-                    var result = await _userManager.CreateAsync(user, model.Password);
+                    var result = await _accountService.Register(model);
                     if (result.Succeeded)
                     {
-                        if (image != null)
-                        {
-                            image.User = user;
-                            _context.UserImages.AddAsync(image).Wait();
-                            await _context.SaveChangesAsync();
-                        }
-                        await _userManager.AddToRoleAsync(user, "User");
-                        await _signInManager.SignInAsync(user, isPersistent: true);
                         return RedirectToAction("Index", controllerName: "Home");
                     }
                     else
@@ -101,7 +67,7 @@ namespace Expire.io.Controllers
         {
             if (ModelState.IsValid)
             {
-                var res = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var res = await _accountService.Login(model);
                 if (res.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
@@ -124,7 +90,8 @@ namespace Expire.io.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOff()
         {
-            await _signInManager.SignOutAsync();
+            await _accountService.LogOff();
+
             return RedirectToAction("Login");
         }
     }

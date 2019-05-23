@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewData["Title"] = "DocumentInfo";
+}
+
+@model Expire.io.DTOs.DocumentDTO;
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">Document info</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="data:image/jpeg;base64,@Model.Image.ToString()" id="documentInfoPhoto"/>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <h3 style="text-align: center">
+                        @Model.Name
+                    </h3>
+                </div>
+                <div class="row">
+                    <span class="col-md-6" style="padding: 0px !important">
+                        <h6 style="margin-right: 2px">
+                            Type of doc:
+                        </h6>
+                    </span>
+                    <span class="col-md-6">
+                        <h6 class="float-md-right">
+                            @Model.TypeOfDocName
+                        </h6>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-md-6" style="padding: 0px !important">
+                        <h6 style="margin-right: 2px">
+                            Date of expiry:
+                        </h6>
+                    </span>
+                    <span class="col-md-6">
+                        <h6 id="dateInDocumentInfo">
+                            @Model.DateOfExpiry.ToString()
+                        </h6>
+                    </span>
+                </div>
+                <div class="row" style="margin-top: 30px;">
+                    <span class="col-md-6" style="padding: 0px !important">
+                        @*<div class="upload-btn-wrapper" style=" position: relative;overflow: hidden;display: inline-block;">
+                            <button class="btn btn-secondary" onclick="uploadPhoto(@Model.Id)" style=" border: 2px solid gray;color: gray;background-color: white; padding: 5px 11px;border-radius: 4px;font-size: 16px;font-weight: bold;">Update</button>
+                            <input type="file" id="documentPhotoUpload"  style="font-size: 50px;position: absolute;left: 0;top: 0;opacity: 0;"/>
+                        </div>*@
+                        <button class="btn btn-secondary" onclick="getModalForUpdateDocument()">Update</button>
+                    </span>
+                    <span class="col-md-6">
+                        <button class="btn btn-danger" >Delete</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+</div>
+
+<div class="modal fade" id="updateDocumentModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Update document</h4>
+                <button type="button" class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="docFormUpdate">
+                    <div class="form-group">
+                        <label >Date of expire</label>
+                        <input type="datetime-local" name="DateOfExpire" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="file" id="file" name="Photo" /><br>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-secondary" id="sudmitButton" />
+                    </div>
+                </form>
+                <div id="docUpdateResult" style="display: none">
+                    <h3>Result</h3>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready($('#docFormUpdate').submit('click',
+        function (e) {
+            e.preventDefault();
+            let form = $(this);
+            let data = new FormData($("#docFormUpdate")[0]);
+            var token = $("input[name^=__RequestVerificationToken]").val();
+            data.append('__RequestVerificationToken', token.toString());
+           data.append("id",window.localStorage.getItem('documentId'));
+            for (var [key, value] of data.entries()) { 
+                if (key == "DateOfExpire") {
+                    data.append("date", value);
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/Document/UpdateDocument",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (resp) {
+                    console.log(resp);
+                    debugger;
+                    $("#documentInfoPhoto")[0].src = 'data:image/jpeg;base64,' + resp.value.photo;
+                    $("dateInDocumentInfo")[0].text = resp.value.date;
+                    $('#updateDocumentModal').modal('hide');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest);
+                }
+                
+            })
+
+            return true;
+        }))
+
+    function closeModal(parameters) {
+        $('#updateDocumentModal').modal('hide');
+    }
+</script>

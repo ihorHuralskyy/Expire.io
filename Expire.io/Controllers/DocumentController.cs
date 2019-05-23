@@ -1,4 +1,5 @@
-﻿using Expire.io.ViewModels;
+﻿using Expire.io.DTO_s;
+using Expire.io.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Expire.io.Services.Contracts;
@@ -31,6 +32,11 @@ namespace Expire.io.Controllers
             return View(list);
         }
 
+        public IActionResult GetExpiredDocumentsByUser(int id)
+        {
+            return View(_documentService.GetExpiredDocumentsByUser(id));
+        }
+
         [HttpPost]
         public IActionResult CreateDocument(DocumentCreationViewModel model)
         {
@@ -53,7 +59,7 @@ namespace Expire.io.Controllers
             else
             {
                 return Json(new
-                { data = $"{model.TypeOfDocId} for {model.UserName} was created successfuly", color = "#353A40" });
+                { data = $"{model.TypeOfDocName} for {model.UserName} was created successfuly", color = "#353A40" });
             }
         }
 
@@ -61,6 +67,17 @@ namespace Expire.io.Controllers
         public IActionResult CreateDocument()
         {
             return PartialView();
+        }
+
+        public IActionResult DocumentInfo(int id)
+        {
+            return PartialView(_documentService.DocumentInfo(id));
+        }
+
+        public IActionResult UpdateDocument(UpdateDocumentDTO documentDto)
+        {
+            var result = _documentService.UpdateDocument(documentDto);
+            return Ok(Json(new {photo = result[0], date = result[1]}));
         }
     }
 }

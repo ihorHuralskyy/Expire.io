@@ -7,9 +7,6 @@
 @using Microsoft.AspNet.Identity
 
 <div class="container" style="margin-top: 50px">
-    <div class="row" style="margin: 20px">
-        <button class="btn btn-outline-secondary" onclick="location.href = '@Url.Action("CreateUser", "Admin")'">Create User</button>
-    </div>
     <ul class="list-group list-group-flush">
         @{
             foreach (Expire.io.DTOs.UserForManagerDTO item in @Model)

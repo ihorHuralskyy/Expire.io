@@ -281,3 +281,45 @@ function createForm() {
 
     })
 }
+
+function getDocumentInfo(id) {
+
+    window.localStorage.setItem("documentId", id);
+    $.ajax({
+        type: "get",
+        url: "/Document/DocumentInfo",
+        data: {id:id},
+        success: function (resp) {
+            $('#documentInfoContent').html(resp);
+            $('#documentInfo').modal('show');
+        },
+        fail: function (err) {
+            alert(err);
+        },
+        error: function (jqXHR, exception) {
+            console.log(jqXHR.status + ' ' + exception);
+        }
+    })
+}
+
+function getModalForUpdateDocument() {
+    $("#updateDocumentModal").modal('show');
+}
+
+function uploadPhoto(documentId){
+    var fd = new FormData();
+    var files = $('#documentPhotoUpload')[0].files[0];
+    fd.append('photo', files);
+    fd.append('id', documentId);
+
+    $.ajax({
+        url: 'Document/UpdateDocument',
+        type: 'post',
+        data: fd,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('#documentInfo').modal('show');
+        }
+    });
+}

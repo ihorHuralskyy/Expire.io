@@ -61,13 +61,13 @@ namespace Expire.io.Helpers
                 var admin = new User
                 {
                     UserName = "admin@gmail.com",
-                    FirstName = "Sebastian",
+                    FirstName = "Seba",
                     LastName = "Laursen"
                 };
 
                 admin.Email = "admin@gmail.com";
 
-                IdentityResult result = _userManager.CreateAsync(admin, "password").Result;
+                IdentityResult result = _userManager.CreateAsync(admin, "12345678").Result;
 
                 if (result.Succeeded)
                 {

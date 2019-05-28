@@ -27,7 +27,10 @@
                                 {
                                     <div style="width: 30%; display: inline-block; vertical-align: top">
                                         <div class="row">
-                                            <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto">Delete</button>
+                                            <button type="button" onclick="getModalForGiveToManager('@item.Id')" class="btn btn-secondary giveToManager ml-auto">Give to manager</button>
+                                        </div>
+                                        <div class="row">
+                                            <button type="button" onclick="deleteUser('@item.UserName.ToString()')" class="btn btn-danger ml-auto" style="margin-top: 7px">Delete</button>
                                         </div>
                                     </div>
                                 }

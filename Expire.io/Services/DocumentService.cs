@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Expire.io.DTO_s;
 
 namespace Expire.io.Services
 {
@@ -34,7 +35,7 @@ namespace Expire.io.Services
             if (user != null)
             {
                 TypeOfDoc type = new TypeOfDoc();
-                switch (model.TypeOfDocId)
+                switch (model.TypeOfDocName)
                 {
                     case "License":
                         type = _context.TypeOfDocs.Where(t => t.Name == "license").First();
@@ -98,10 +99,10 @@ namespace Expire.io.Services
 
             var list = _context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
             {
-                Id = ud.Id,
+                Id = ud.DocumentId,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
-                TypeOfDocId = ud.Document.TypeOfDoc.Name,
+                TypeOfDocName = ud.Document.TypeOfDoc.Name,
                 Image = Convert.ToBase64String(_context.DocumentImages.FirstOrDefault(item => item.DocumentId == ud.DocumentId).Image)
             }).ToList();
 
@@ -117,12 +118,105 @@ namespace Expire.io.Services
 
             var list = _context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
             {
-                Id = ud.Id,
+                Id = ud.DocumentId,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
-                TypeOfDocId = ud.Document.TypeOfDoc.Name,
+                TypeOfDocName = ud.Document.TypeOfDoc.Name,
                 Image = Convert.ToBase64String(_context.DocumentImages
                     .FirstOrDefault(item => item.DocumentId == ud.DocumentId).Image)
+            }).ToList();
+
+            return list;
+        }
+
+        public List<DocumentDTO> GetExpiredDocumentsByUser(int id)
+        {
+            var list = _context.Documents.Where(item => item.Id == _context.UserDocuments
+                         .FirstOrDefault(ud => ud.UserId == id && ud.DocumentId == item.Id).DocumentId &&
+                     (item.DateOfExpiry.Value - DateTime.Now.Date).TotalDays < 0).Select(item => new DocumentDTO
+                     {
+                         Id =  item.Id,
+                         TypeOfDocName = item.TypeOfDoc.Name,
+                         Name = item.Name,
+                         Image = Convert.ToBase64String(item.Image.Image),
+                         DateOfExpiry = item.DateOfExpiry
+                     });
+
+            return list.ToList();
+        }
+
+        public DocumentDTO DocumentInfo(int id)
+        {
+            Document document = _context.Documents.FirstOrDefault(item => item.Id == id);
+            DocumentDTO documentDto = new DocumentDTO
+            {
+                Id = document.Id,
+                Image = Convert.ToBase64String(_context.DocumentImages.FirstOrDefault(item=>item.DocumentId == document.Id).Image),
+                Name = document.Name,
+                TypeOfDocName = _context.TypeOfDocs.FirstOrDefault(item=>item.Id == document.TypeOfDocId).Name,
+                DateOfExpiry = document.DateOfExpiry.Value
+            };
+            return documentDto;
+        }
+
+        public string[] UpdateDocument(UpdateDocumentDTO model)
+        {
+            var document = _context.Documents.FirstOrDefault(item => item.Id == model.Id);
+            var a = model.date.Split("-");
+            var b = a[2].Split("T");
+            var c = b[1].Split(":");
+            DateTime time = new DateTime(int.Parse(a[0]), int.Parse(a[1]), int.Parse(b[0]), int.Parse(c[0]), int.Parse(c[1]), 0);
+            document.DateOfExpiry = time;
+            DocumentImage dc;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                model.Photo.CopyTo(ms);
+                byte[] img = ms.ToArray();
+                Image<Rgba32> image = Image.Load(img);
+
+                image.Mutate(x => x.
+                    Resize(200, 200));
+
+                ms.Seek(0, SeekOrigin.Begin);
+
+                image.SaveAsJpeg(ms);
+
+                img = ms.ToArray();
+
+                dc = new DocumentImage { Image = img };
+            }
+
+            int idToDelete = _context.DocumentImages.FirstOrDefault(item=>item.DocumentId == document.Id).Id;
+            _context.DocumentImages.Add(dc);
+
+            _context.DocumentImages.Remove(_context.DocumentImages.FirstOrDefault(item=>item.Id==idToDelete));
+
+            _context.DocumentImages.Add(dc);
+
+            document.Image = dc;
+
+            _context.Documents.Update(document);
+            _context.SaveChanges();
+
+            return new string[]{Convert.ToBase64String(document.Image.Image),time.ToString()};
+        }
+
+        public void DeleteDocument(int id)
+        {
+            var toDelete = _context.Documents.FirstOrDefault(item => item.Id == id);
+            _context.Remove(toDelete);
+            _context.SaveChanges();
+        }
+
+        public List<DocumentDTO> FindByString(string str)
+        {
+            var list = _context.Documents.Where(item=>item.Name.Contains(str)).Select(item=>new DocumentDTO
+            {
+                Id = item.Id,
+                TypeOfDocName = item.TypeOfDoc.Name,
+                Name = item.Name,
+                Image = Convert.ToBase64String(item.Image.Image),
+                DateOfExpiry = item.DateOfExpiry
             }).ToList();
 
             return list;

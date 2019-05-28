@@ -12,10 +12,10 @@
     <div class="modal-body">
         <form id="docForm">
             <div class="form-group">
-                <label asp-for="TypeOfDocId">Type</label>
-                <select class="form-control" asp-for="TypeOfDocId">
+                <label asp-for="TypeOfDocName">Type</label>
+                <select class="form-control" asp-for="TypeOfDocName">
                     <option value="License">License</option>
-                    <option value="Sertificate">Sertificate</option>
+                    <option value="Sertificate">Certificate</option>
                     <option value="Insurance">Insurance</option>
                 </select>
             </div>
@@ -24,11 +24,20 @@
                 <input asp-for="Name" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="UserName"></label>
-                <input asp-for="UserName" class="form-control" />
+                <label asp-for="UserName">User Name</label>
+                @{
+                    if (User.IsInRole("Admin"))
+                    {
+                        <input asp-for="UserName" class="form-control" />
+                    }
+                    else
+                    {
+                        <input asp-for="UserName" class="form-control" value="@User.Identity.Name" readonly/>
+                    }
+                }
             </div>
             <div class="form-group">
-                <label asp-for="DateOfExpiry"></label>
+                <label asp-for="DateOfExpiry">Date of expire</label>
                 <input asp-for="DateOfExpiry" class="form-control" />
             </div>
             <div class="form-group">
@@ -43,7 +52,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
     </div>
 </div>
 <script>
@@ -54,7 +63,7 @@
             let data = new FormData($("#docForm")[0]);
             var token = $("input[name^=__RequestVerificationToken]").val();
             data.append('__RequestVerificationToken', token.toString());
-            for (var [key, value] of data.entries()) { 
+            for (var [key, value] of data.entries()) {
                 if (key == "DateOfExpiry") {
                     data.append("datetime", value);
                 }
@@ -88,5 +97,8 @@
             return false;
         }))
 
-   
+    function refresh() {
+        window.location.reload();
+    }
+
 </script>

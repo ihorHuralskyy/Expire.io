@@ -14,7 +14,7 @@ namespace Expire.io.ViewModels
         public string Name { get; set; }
         public string UserName { get; set; }
         public DateTime DateOfExpiry { get; set; }
-        public string TypeOfDocId { get; set; }
+        public string TypeOfDocName { get; set; }
         public IFormFile Photo { get; set; }
         public string datetime { get; set; }
     }

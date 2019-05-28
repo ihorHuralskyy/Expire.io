@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "GetExpiredDocumentsByUser";
 }
 @model List<Expire.io.DTOs.DocumentDTO>
 
@@ -13,14 +13,11 @@
                 <button type="button" class="btn btn-outline-secondary" onclick="filterElement(this)" doc_type="sertificate">Sertificate</button>
             </div>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-outline-secondary" onclick="getModalForCreateDocument()">Create document</button>
-        </div>
         <div class="col-md-4">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="documentSearch" placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="findByFilter()">Search</button>
+                    <button class="btn btn-outline-secondary" type="button">Search</button>
                 </div>
             </div>
         </div>
@@ -31,14 +28,14 @@
             {
                 if (@Model[i].TypeOfDocName.ToLower() == "license")
                 {
-                    <div class="col-md-3 filterItem" data-group='license' id="document_@Model[i].Id">
-                        <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
+                    <div class="col-md-3 filterItem" data-group='license'>
+                        <div class="card shadow">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocName</h5>
                                 <p class="card-text">@Model[i].Name</p>
                                 @{
-                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays >14 )
+                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays > 14)
                                     {
                                         <hr style="border-color: green; border-width: 4px" />
                                     }
@@ -57,14 +54,14 @@
                 }
                 else if (@Model[i].TypeOfDocName.ToLower() == "insurance")
                 {
-                    <div class="col-md-3 filterItem" data-group='insurance' id="document_@Model[i].Id">
-                        <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
+                    <div class="col-md-3 filterItem" data-group='insurance'>
+                        <div class="card shadow">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image." alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocName</h5>
                                 <p class="card-text">@Model[i].Name</p>
                                 @{
-                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays >14 )
+                                    if ((@Model[i].DateOfExpiry.Value.Date - DateTime.Now.Date).TotalDays > 14)
                                     {
                                         <hr style="border-color: green; border-width: 4px" />
                                     }
@@ -83,8 +80,8 @@
                 }
                 else if (@Model[i].TypeOfDocName.ToLower() == "sertificate")
                 {
-                    <div class="col-md-3 filterItem" data-group='sertificate' id="document_@Model[i].Id">
-                        <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
+                    <div class="col-md-3 filterItem" data-group='sertificate'>
+                        <div class="card shadow">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].TypeOfDocName</h5>
@@ -112,62 +109,3 @@
     </div>
 </div>
 
-<div class="modal fade" id="documentInfo" role="dialog">
-    <div id="documentInfoContent" class="modal-dialog modal-dialog-centered" style="max-width: 650px;">
-    </div>
-</div>
-
-<div class="modal fade" id="modDialog" role="dialog">
-    <div id="dialogContent" class="modal-dialog">
-    </div>
-</div>
-
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Modal Header</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    gridContainer = $("#shuffleContainer");
-    var sizer = gridContainer.find(".col-md-3");
-    var shuffleInstance = new Shuffle(gridContainer, {
-
-        itemSelector: '.filterItem',
-        sizer: sizer // could also be a selector: '.my-sizer-element'
-    });
-
- 
-    /*searchDocument.addEventListener('input', function () {
-        console.log(searchDocument.value);
-        var searchText = searchDocument.value.toLowerCase();
-
-        let button1 = $("[doc_type='license']");
-        let button2 = $("[doc_type='insurance']");
-        let button3 = $("[doc_type='sertificate']");
-        button1[0].className = "btn btn-outline-secondary";
-        button2[0].className = "btn btn-outline-secondary";
-        button3[0].className = "btn btn-outline-secondary";
-
-        shuffleInstance.filter(function (element) {
-            var titleElement = element.querySelector('.card-title');
-            var titleText = titleElement.textContent.toLowerCase().trim();
-
-            return titleText.indexOf(searchText) !== -1;
-        });
-    });*/
-</script>

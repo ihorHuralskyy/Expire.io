@@ -78,7 +78,7 @@ namespace Expire.io
             app.UseAuthentication();
 
             seeder.SeedUsers();
-
+           // seeder.CheckAndSend();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

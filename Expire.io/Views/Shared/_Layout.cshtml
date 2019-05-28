@@ -54,14 +54,20 @@
                         <li class="nav-item active">
                             <a class="nav-link" asp-area="" asp-controller="Document" asp-action="Index">Documents</a>
                         </li>
-                       @{
-                           if (User.IsInRole("Admin"))
-                           {
-                               <li class="nav-item active">
-                                   <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllUsers">Users</a>
-                               </li>
-                           }
-                       }
+                        @{
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item active">
+                                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllUsers">Users</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Manager"))
+                            {
+                                <li class="nav-item active">
+                                    <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="AllUsersByManager">Users</a>
+                                </li>
+                            }
+                        }
                     </ul>
                     <form class="form-inline my-2 my-lg-0 " asp-controller="Account" asp-action="LogOff">
                         <p class=" ml-auto" style="color: aliceblue ;margin: 0 5px 0 0;">@User.Identity.Name</p>

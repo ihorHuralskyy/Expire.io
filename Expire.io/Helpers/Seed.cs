@@ -85,7 +85,7 @@ namespace Expire.io.Helpers
             /*var list = _context.Documents.Where(item => (item.DateOfExpiry.Value - DateTime.Now).TotalDays < 0)
                 .ToList();*/
             EmailSender sender = new EmailSender();
-            sender.SendEmail("tarikkataryna1999@gmail.com","Taras","Kataryna","Java license");
+            sender.SendEmail("tarikkataryna1999@gmail.com","Taras","Kataryna");
         }
     }
 }

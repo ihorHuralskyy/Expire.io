@@ -99,7 +99,7 @@ namespace Expire.io.Services
 
             var list = _context.UserDocuments.Where(ud => ud.UserId == id).Select(ud => new DocumentDTO
             {
-                Id = ud.Id,
+                Id = ud.DocumentId,
                 Name = ud.Document.Name,
                 DateOfExpiry = ud.Document.DateOfExpiry,
                 TypeOfDocName = ud.Document.TypeOfDoc.Name,
@@ -147,8 +147,7 @@ namespace Expire.io.Services
 
         public DocumentDTO DocumentInfo(int id)
         {
-            var list = _context.Documents.ToList();
-            Document document = list.Find(item => item.Id == id);
+            Document document = _context.Documents.FirstOrDefault(item => item.Id == id);
             DocumentDTO documentDto = new DocumentDTO
             {
                 Id = document.Id,
@@ -200,6 +199,27 @@ namespace Expire.io.Services
             _context.SaveChanges();
 
             return new string[]{Convert.ToBase64String(document.Image.Image),time.ToString()};
+        }
+
+        public void DeleteDocument(int id)
+        {
+            var toDelete = _context.Documents.FirstOrDefault(item => item.Id == id);
+            _context.Remove(toDelete);
+            _context.SaveChanges();
+        }
+
+        public List<DocumentDTO> FindByString(string str)
+        {
+            var list = _context.Documents.Where(item=>item.Name.Contains(str)).Select(item=>new DocumentDTO
+            {
+                Id = item.Id,
+                TypeOfDocName = item.TypeOfDoc.Name,
+                Name = item.Name,
+                Image = Convert.ToBase64String(item.Image.Image),
+                DateOfExpiry = item.DateOfExpiry
+            }).ToList();
+
+            return list;
         }
     }
 }

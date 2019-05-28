@@ -1,4 +1,5 @@
-﻿using Expire.io.DTO_s;
+﻿using System;
+using Expire.io.DTO_s;
 using Expire.io.DTOs;
 using Expire.io.Models.Entities;
 using Expire.io.ViewModels;
@@ -14,5 +15,7 @@ namespace Expire.io.Services.Contracts
         List<DocumentDTO> GetExpiredDocumentsByUser(int id);
         DocumentDTO DocumentInfo(int id);
         string[] UpdateDocument(UpdateDocumentDTO documentDto);
+        void DeleteDocument(int id);
+        List<DocumentDTO> FindByString(string str);
     }
 }

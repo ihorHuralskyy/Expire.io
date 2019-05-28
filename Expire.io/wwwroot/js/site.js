@@ -221,7 +221,7 @@ function giveToManager(managerUserName) {
         url: "/Admin/GiveToManager",
         data: {
             managerName: managerUserName,
-            userId:userId
+            userId: userId
         },
         success: function (resp) {
             $('#modalForGiveToManager').modal('hide');
@@ -246,7 +246,7 @@ function clearFromStorage() {
 
 
 function createForm() {
-    $("#docForm").submit('click', function() {
+    $("#docForm").submit('click', function () {
         let photo = $('#file')[0].files[0];
         let data = new FormData(this);
         //let data = $('#docForm').serialize();
@@ -288,7 +288,7 @@ function getDocumentInfo(id) {
     $.ajax({
         type: "get",
         url: "/Document/DocumentInfo",
-        data: {id:id},
+        data: { id: id },
         success: function (resp) {
             $('#documentInfoContent').html(resp);
             $('#documentInfo').modal('show');
@@ -306,7 +306,7 @@ function getModalForUpdateDocument() {
     $("#updateDocumentModal").modal('show');
 }
 
-function uploadPhoto(documentId){
+function uploadPhoto(documentId) {
     var fd = new FormData();
     var files = $('#documentPhotoUpload')[0].files[0];
     fd.append('photo', files);
@@ -321,5 +321,71 @@ function uploadPhoto(documentId){
         success: function (response) {
             $('#documentInfo').modal('show');
         }
+    });
+}
+
+function deleteDocument(id) {
+
+    $.ajax({
+        type: "get",
+        url: "/Document/DeleteDocument",
+        data: { id: id },
+        success: function (resp) {
+            let myModel = $("#myModal");
+            myModel.find(".modal-title")[0].textContent = "Delete document";
+            myModel.find(".modal-body").find("p")[0].textContent = resp.value.resp;
+
+            $("#myModal").modal('show');
+
+            $("#document_" + id.toString()).hide();
+        }
+    })
+}
+
+function findByFilter() {
+    let searchDocument = $("#documentSearch")[0];
+
+    if (searchDocument.value == "") {
+        location.reload();
+    } else {
+        let button1 = $("[doc_type='license']");
+        let button2 = $("[doc_type='insurance']");
+        let button3 = $("[doc_type='sertificate']");
+        if (button1[0].className != "btn btn-outline-secondary")
+            button1[0].click();
+        if (button2[0].className != "btn btn-outline-secondary")
+            button2[0].click();
+        if (button3[0].className != "btn btn-outline-secondary")
+            button3[0].click();
+        $.ajax({
+            type: "get",
+            url: "/Document/FindByString",
+            data: { str: searchDocument.value },
+            success: function (resp) {
+                let filterItems = $(".filterItem");
+                let response = $.map(resp, function (el) { return el; });
+
+
+                for (let i = 0; i < filterItems.length; ++i) {
+                    let id = filterItems[i].getAttribute("id").split('_')[1];
+                    if (response.find(function (object) {
+                        return object.id.toString() == parseInt(id);
+                    }) ==
+                        undefined) {
+
+                        filterItems[i].style.display = "none";
+                    }
+                }
+            }
+        })
+    }
+}
+
+function notifyUser() {
+    let user = $("h3")[0].innerText.split(" ")[2];
+    $.ajax({
+        type: "get",
+        url: "/Manager/Notify",
+        data: { email:user.toString() }
     });
 }

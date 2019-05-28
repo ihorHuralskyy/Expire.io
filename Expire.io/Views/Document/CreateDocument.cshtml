@@ -25,7 +25,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserName">User Name</label>
-                <input asp-for="UserName" class="form-control" />
+                @{
+                    if (User.IsInRole("Admin"))
+                    {
+                        <input asp-for="UserName" class="form-control" />
+                    }
+                    else
+                    {
+                        <input asp-for="UserName" class="form-control" value="@User.Identity.Name" readonly/>
+                    }
+                }
             </div>
             <div class="form-group">
                 <label asp-for="DateOfExpiry">Date of expire</label>
@@ -43,7 +52,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
     </div>
 </div>
 <script>
@@ -54,7 +63,7 @@
             let data = new FormData($("#docForm")[0]);
             var token = $("input[name^=__RequestVerificationToken]").val();
             data.append('__RequestVerificationToken', token.toString());
-            for (var [key, value] of data.entries()) { 
+            for (var [key, value] of data.entries()) {
                 if (key == "DateOfExpiry") {
                     data.append("datetime", value);
                 }
@@ -88,5 +97,8 @@
             return false;
         }))
 
-   
+    function refresh() {
+        window.location.reload();
+    }
+
 </script>

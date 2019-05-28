@@ -11,19 +11,19 @@ namespace Expire.io.Helpers
 {
     public class EmailSender
     {
-        public void SendEmail(string email, string fname, string lname, string documentName )
+        public void SendEmail(string email, string fname, string lname)
 
         {
             //calling for creating the email body with html template   
 
             string body =
-                this.createEmailBody(fname,lname,documentName);
+                this.createEmailBody(fname,lname);
 
             this.SendHtmlFormattedEmail("ExpireIO", body,email);
 
         }
 
-        private string createEmailBody(string fName, string lname, string documentName)
+        private string createEmailBody(string fName, string lname)
 
         {
 
@@ -41,7 +41,7 @@ namespace Expire.io.Helpers
 
             body = body.Replace("{lname}", lname);
 
-            body = body.Replace("{documentName}", documentName);
+           // body = body.Replace("{documentName}", documentName);
 
             return body;
 

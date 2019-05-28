@@ -20,7 +20,7 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="documentSearch" placeholder="Document name" aria-label="Document name" aria-describedby="basic-addon2">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Search</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="findByFilter()">Search</button>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
             {
                 if (@Model[i].TypeOfDocName.ToLower() == "license")
                 {
-                    <div class="col-md-3 filterItem" data-group='license'>
+                    <div class="col-md-3 filterItem" data-group='license' id="document_@Model[i].Id">
                         <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
                             <div class="card-body">
@@ -57,7 +57,7 @@
                 }
                 else if (@Model[i].TypeOfDocName.ToLower() == "insurance")
                 {
-                    <div class="col-md-3 filterItem" data-group='insurance'>
+                    <div class="col-md-3 filterItem" data-group='insurance' id="document_@Model[i].Id">
                         <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image." alt="Card image cap">
                             <div class="card-body">
@@ -83,7 +83,7 @@
                 }
                 else if (@Model[i].TypeOfDocName.ToLower() == "sertificate")
                 {
-                    <div class="col-md-3 filterItem" data-group='sertificate'>
+                    <div class="col-md-3 filterItem" data-group='sertificate' id="document_@Model[i].Id">
                         <div class="card shadow" onclick="getDocumentInfo(@Model[i].Id)">
                             <img class="card-img-top" src="data:image/jpeg;base64,@Model[i].Image.ToString()" alt="Card image cap">
                             <div class="card-body">
@@ -113,12 +113,32 @@
 </div>
 
 <div class="modal fade" id="documentInfo" role="dialog">
-    <div id="documentInfoContent" class="modal-dialog modal-dialog-centered ">
+    <div id="documentInfoContent" class="modal-dialog modal-dialog-centered" style="max-width: 650px;">
     </div>
 </div>
 
 <div class="modal fade" id="modDialog" role="dialog">
     <div id="dialogContent" class="modal-dialog">
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Header</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -131,8 +151,8 @@
         sizer: sizer // could also be a selector: '.my-sizer-element'
     });
 
-    let searchDocument = $("#documentSearch")[0];
-    searchDocument.addEventListener('input', function () {
+ 
+    /*searchDocument.addEventListener('input', function () {
         console.log(searchDocument.value);
         var searchText = searchDocument.value.toLowerCase();
 
@@ -149,5 +169,5 @@
 
             return titleText.indexOf(searchText) !== -1;
         });
-    });
+    });*/
 </script>

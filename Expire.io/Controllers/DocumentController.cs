@@ -79,5 +79,24 @@ namespace Expire.io.Controllers
             var result = _documentService.UpdateDocument(documentDto);
             return Ok(Json(new {photo = result[0], date = result[1]}));
         }
+
+        public IActionResult DeleteDocument(int id)
+        {
+            _documentService.DeleteDocument(id);
+            return Ok(Json(new {resp = "Document was deleted successfully!"}));
+        }
+
+        public IActionResult FindByString(string str)
+        {
+            var list = _documentService.FindByString(str);
+            if (list == null)
+            {
+                return Ok(Json(new {resp = ""}));
+            }
+            else
+            {
+                return Ok(list);
+            }
+        }
     }
 }

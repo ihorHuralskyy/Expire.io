@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Expire.io.DTOs;
+using Expire.io.Helpers;
 using Expire.io.Models.Data;
 using Expire.io.Models.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -38,5 +39,14 @@ namespace Expire.io.Controllers
         {
             return View();
         }
+
+        public IActionResult Notify(string email)
+        {
+            EmailSender sender = new EmailSender();
+            var user = _context.Users.FirstOrDefault(item => item.UserName == email);
+            sender.SendEmail(email, user.FirstName, user.LastName);
+            return Ok();
+        }
+
     }
 }

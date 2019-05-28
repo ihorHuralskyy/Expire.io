@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expire.io", "Expire.io\Expire.io.csproj", "{4B0C8E37-C38C-4DA3-8271-BCB990A30C18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expire.io", "Expire.io\Expire.io.csproj", "{4B0C8E37-C38C-4DA3-8271-BCB990A30C18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expire.io.Tests", "Expire.io.Tests\Expire.io.Tests.csproj", "{0C98AC4A-DF54-4B46-A80A-06D65B3CF21B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4B0C8E37-C38C-4DA3-8271-BCB990A30C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B0C8E37-C38C-4DA3-8271-BCB990A30C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B0C8E37-C38C-4DA3-8271-BCB990A30C18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C98AC4A-DF54-4B46-A80A-06D65B3CF21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C98AC4A-DF54-4B46-A80A-06D65B3CF21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C98AC4A-DF54-4B46-A80A-06D65B3CF21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C98AC4A-DF54-4B46-A80A-06D65B3CF21B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

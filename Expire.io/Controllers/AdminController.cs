@@ -42,8 +42,7 @@ namespace Expire.io.Controllers
                     var result = await _adminService.CreateUser(model);
                     if (result.Result.Succeeded)
                     {
-                        Response.StatusCode = 200;
-                        return Json(new { Success = true });
+                        return Ok(new { Success = true });
                     }
                     else
                     {
@@ -69,11 +68,11 @@ namespace Expire.io.Controllers
             var result = await _adminService.DeleteUser(username);
             if (result.Result.Succeeded)
             {
-                return Ok(Json(new { resp = "User was deleted", id = result.User.Id }));
+                return Ok(new { resp = "User was deleted", id = result.User.Id });
             }
             else
             {
-                return BadRequest(Json(new { resp = "Unexpected server error" }));
+                return BadRequest(new { resp = "Unexpected server error" });
             }
         }
 
@@ -83,14 +82,14 @@ namespace Expire.io.Controllers
             var result = _adminService.MakeUserAnAdmin(username);
             if (result.Result.Succeeded)
             {
-                return Ok(Json(new
+                return Ok(new
                 {
                     resp = result.User.UserName.ToString() + " was added to role Admin ", id = result.User.Id
-                }));
+                });
             }
             else
             {
-                return BadRequest(Json(new { resp = "Unexpected server error" }));
+                return BadRequest(new { resp = "Unexpected server error" });
             }
         }
 
@@ -99,12 +98,12 @@ namespace Expire.io.Controllers
             var result = _adminService.MakeUserAnManager(username);
             if (result.Result.Succeeded == true)
             {
-                return Ok(Json(new { resp = result.User.UserName.ToString() + " was added to role Manager ",
-                    id = result.User.Id }));
+                return Ok(new { resp = result.User.UserName.ToString() + " was added to role Manager ",
+                    id = result.User.Id });
             }
             else
             {
-                return BadRequest(Json(new { resp = "Unexpected server error" }));
+                return BadRequest(new { resp = "Unexpected server error" });
             }
         }
 
@@ -125,8 +124,7 @@ namespace Expire.io.Controllers
             }
             else
             {
-                HttpContext.Response.StatusCode = 200;
-                return Json(new { resp = "User was added to manager" });
+                return Ok(new { resp = "User was added to manager" });
             }
         }
     }

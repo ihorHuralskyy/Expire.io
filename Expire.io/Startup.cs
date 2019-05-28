@@ -46,6 +46,8 @@ namespace Expire.io
 
             services.AddScoped<IHomeService, HomeService>();
 
+            services.AddScoped<IManagerService, ManagerService>();
+
             services.AddHttpContextAccessor();
 
             services.AddAuthorization(opts =>

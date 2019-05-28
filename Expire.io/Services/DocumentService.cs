@@ -71,8 +71,8 @@ namespace Expire.io.Services
 
                 var a = model.datetime.Split("-");
                 var b = a[2].Split("T");
-                var c = b[1].Split(":");
-                DateTime time = new DateTime(int.Parse(a[0]), int.Parse(a[1]), int.Parse(b[0]), int.Parse(c[0]), int.Parse(c[1]), 0);
+                //var c = b[1].Split(":");
+                DateTime time = new DateTime(int.Parse(a[0]), int.Parse(a[1]), int.Parse(b[0]), 0,0/*int.Parse(c[0]), int.Parse(c[1])*/, 1);
                 Document docToCreate = new Document
                 {
                     Name = model.Name,
@@ -163,9 +163,9 @@ namespace Expire.io.Services
         {
             var document = _context.Documents.FirstOrDefault(item => item.Id == model.Id);
             var a = model.date.Split("-");
-            var b = a[2].Split("T");
-            var c = b[1].Split(":");
-            DateTime time = new DateTime(int.Parse(a[0]), int.Parse(a[1]), int.Parse(b[0]), int.Parse(c[0]), int.Parse(c[1]), 0);
+            var b = a[2].Split(" ");
+           // var c = b[1].Split(":");
+            DateTime time = new DateTime(int.Parse(a[0]), int.Parse(a[1]), int.Parse(b[0]), 0,0/*int.Parse(c[0]), int.Parse(c[1])*/, 1);
             document.DateOfExpiry = time;
             DocumentImage dc;
             using (MemoryStream ms = new MemoryStream())

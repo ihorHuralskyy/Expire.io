@@ -7,6 +7,7 @@ using Expire.io.DTOs;
 using Expire.io.Helpers;
 using Expire.io.Models.Data;
 using Expire.io.Models.Entities;
+using Expire.io.Services.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,25 +15,17 @@ namespace Expire.io.Controllers
 {
     public class ManagerController : Controller
     {
+        private readonly IManagerService _managerService;
 
-        private readonly UserManager<User> _userManager;
-        private readonly ExpireContext _context;
-        private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<Role> _roleManager;
-
-        public ManagerController(UserManager<User> userManager, ExpireContext context, SignInManager<User> sm, RoleManager<Role> rm)
+        public ManagerController(IManagerService managerService)
         {
-            _userManager = userManager;
-            _context = context;
-            _signInManager = sm;
-            _roleManager = rm;
+            _managerService = managerService;
         }
 
         public IActionResult AllUsersByManager()
         {
-            int managerId = _context.Users.FirstOrDefault(item => item.UserName == User.Identity.Name).Id;
-            var list = _context.Users.Where(item =>
-                _context.ManagerUsers.Where(i => i.ManagerId == managerId).Any(u => u.UserId == item.Id)).Select(p=> new UserForManagerDTO{Id = p.Id, UserName = p.UserName}).ToList();
+            var list = _managerService.AllUsersByManager();
+
             return View(list);
         }
         public IActionResult Index()
@@ -42,9 +35,8 @@ namespace Expire.io.Controllers
 
         public IActionResult Notify(string email)
         {
-            EmailSender sender = new EmailSender();
-            var user = _context.Users.FirstOrDefault(item => item.UserName == email);
-            sender.SendEmail(email, user.FirstName, user.LastName);
+            _managerService.Notify(email);
+
             return Ok();
         }
 

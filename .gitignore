@@ -651,3 +651,4 @@ $RECYCLE.BIN/
 .DS_Store
 
 # End of https://www.gitignore.io/api/csharp,windows,aspnetcore,visualstudio
+**/wwwroot/*
